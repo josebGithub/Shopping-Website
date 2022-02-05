@@ -1,0 +1,26 @@
+@import 'navbar.css';
+
+.home-page-header{
+    width: 100%;
+    height: calc(100vh - 120px);
+    background-image: url('../img/home-page.jpg');
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.home-page-header .logo{
+    height: 150px;
+    display: block;
+    margin: auto;
+}
+
+.home-page-header .sub-heading{
+    margin-top: 10px;
+    text-align: center;
+    color: rgb(19, 235, 250);
+    text-transform: capitalize;
+    font-size: 35px;
+    font-weight: 300;
+}

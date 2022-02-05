@@ -3,7 +3,7 @@ const createNav = () => {
 
     nav.innerHTML = `
         <div class="nav">
-            <img src="img/shopping.png" class="brand-logo" alt="">
+            <img src="img/logo.png" class="brand-logo" alt="">
             <div class="nav-items">
                 <div class="search">
                     <input type="text" class="search-box" placeholder="search brand, product">
@@ -14,11 +14,11 @@ const createNav = () => {
             </div>
         </div>
         <ul class="links-container">
-            <li class="link-item"><a href="#" class="link">home</a></li>
-            <li class="link-item"><a href="#" class="link">women</a></li>
-            <li class="link-item"><a href="#" class="link">men</a></li>
-            <li class="link-item"><a href="#" class="link">kids</a></li>
-            <li class="link-item"><a href="#" class="link">accessories</a></li>
+            <li class="link-item"><a href="#home" class="link">home</a></li>
+            <li class="link-item"><a href="pastries.html" class="link">pastries</a></li>
+            <li class="link-item"><a href="#" class="link">cakes</a></li>
+            <li class="link-item"><a href="#" class="link">pies</a></li>
+            <li class="link-item"><a href="#" class="link">cookies</a></li>
         </ul>
     `;
 }
