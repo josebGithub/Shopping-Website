@@ -3,16 +3,22 @@
     width: 100%;
     padding: 60px 10vw;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-wrap:wrap;
+    justify-content: space-evenly;
 }
 
+
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
-    margin: auto;
-    text-align: center;
-    font-family: arial;
+   flex: 0 1 1 0px;
+   border: 12px;
+   border-style: groove;
+   border-color: rgb(19, 235, 250);
+    /*box-shadow: 0 4px 8px 0 rgba(28, 185, 224, 0.2); */
+   max-width: 300px; 
+   max-height: 300px;
+   margin: auto;
+   text-align: center;
+   font-family: arial;
   }
   
   .price {
@@ -25,7 +31,7 @@
     outline: 0;
     padding: 12px;
     color: white;
-    background-color: #000;
+    background-color: rgb(80, 168, 226);
     text-align: center;
     cursor: pointer;
     width: 100%;
@@ -35,3 +41,12 @@
   .card button:hover {
     opacity: 0.7;
   }
+
+  .card p {
+    padding:8px;
+  }
+
+  .card h1 {
+    color:rgb(13, 197, 197);
+  }
+
