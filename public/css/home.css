@@ -3,7 +3,7 @@
 .home-page-header{
     width: 100%;
     height: calc(100vh - 120px);
-    background-image: url('../img/home-page.jpg');
+    background-image: url('../images/home-page.jpg');
     background-size: cover;
     display: flex;
     justify-content: center;
