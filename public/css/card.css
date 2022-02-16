@@ -14,8 +14,10 @@
    border-style: groove;
    border-color: rgb(19, 235, 250);
     /*box-shadow: 0 4px 8px 0 rgba(28, 185, 224, 0.2); */
-   max-width: 300px; 
-   max-height: 300px;
+   /*max-width: 300px; 
+   max-height: 300px; */
+   width: 300px;
+   height: 300px;
    margin: auto;
    text-align: center;
    font-family: arial;
@@ -49,4 +51,10 @@
   .card h1 {
     color:rgb(13, 197, 197);
   }
+
+  .card img {
+    width: 50px;
+    height: 90px;
+  }
+  
 

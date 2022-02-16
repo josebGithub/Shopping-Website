@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 // other modules
-var displayHomePage 	= require("./displayHomePage");
-var displayPastriesPage   = require("./displayPastriesPage");
+var displayHomePage 	= require("./home.controller");
+var displayPastriesPage   = require("./pastries.controller");
 /** 
 var addEmployee 		= require("./addEmployee");
 var saveEmployee 		= require("./saveEmployee");

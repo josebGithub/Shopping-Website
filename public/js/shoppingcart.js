@@ -1,6 +1,6 @@
 var shoppingCart=[];
 
-function addToCart(itemId, name,description,price, quantity){
+function addToCart(sku, name,description,price, quantity){
     alert("Call addToCart()");
     console.log("Call addToCart()"); 
     var singleProduct = {};
@@ -9,7 +9,7 @@ function addToCart(itemId, name,description,price, quantity){
     singleProduct.Description=description;
     singleProduct.Price=price;
     //Add newly created product to our shopping cart 
-    localStorage.setItem(itemId, JSON.stringify(singleProduct));
+    localStorage.setItem(sku, JSON.stringify(singleProduct));
  }  
 
  function displayShoppingCart() {

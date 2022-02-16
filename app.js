@@ -21,7 +21,7 @@ app.use('/', routes);
 
 app.use(function(req, res) {
     res.status(404);
-    res.render('404');
+    res.render('404View');
 });
 
 app.listen(3000, function(){
