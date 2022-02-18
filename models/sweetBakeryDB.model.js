@@ -35,6 +35,30 @@ let productSchema = new Schema({
 	collection: 'product'
 });
 
+/** 
+let itemSchema = new Schema ({
+    productId: {type: mongoose.Schema.Types.ObjectId, required:true},
+    quantity: {type: Number, required: true,
+            min: [1, "Quantity can not be less than 1"]},
+    price: {type: mongoose.Types.Decimal128, required: true},
+    total: { type: Number, required: true }
+    },
+    {
+        timestamps: true
+    }
+);
+
+let cardSchema = new Schema ({
+    userId: {type: mongoose.Schema.Types.ObjectId, required:true},
+    items: [itemSchema],
+    subTotal: { default: 0, type: Number }
+    },
+    {
+        timestamps: true
+    }
+);
+*/
+
 let orderSchema = new Schema({
     orderid: { type: String, required: true },
 	userid: { type: Number, required: true },

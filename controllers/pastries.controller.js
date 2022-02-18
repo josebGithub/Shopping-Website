@@ -14,6 +14,7 @@ module.exports = async (req, res, next) => {
             console.log("Call pastriesView");
             let results = pastries.map( pastry => {
                 return {
+                    id: pastry.id,
                     sku: pastry.sku,
                     name: pastry.name,
                     description: pastry.description,
@@ -23,8 +24,6 @@ module.exports = async (req, res, next) => {
                     image: pastry.image
                 }
             });
-
-            console.log(results);
 
             res.render('pastriesView', 
                 {title:"Display Pastries Page",
