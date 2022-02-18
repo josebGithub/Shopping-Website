@@ -8,7 +8,10 @@ var app = express();
 
 // setup handlebars view engine
 app.engine('handlebars', 
-    handlebars({defaultLayout: 'navigationbar'}));
+    handlebars({defaultLayout: 'navigationbar',
+            helpers: {
+              shoppingCartPage : false
+            }}));
 app.set('view engine', 'handlebars');
 
 app.use(bodyParser.urlencoded({ extended: false }));

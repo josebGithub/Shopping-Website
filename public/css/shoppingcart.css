@@ -1,3 +1,4 @@
+/**
 body{
 	margin: 0;
 	padding: 0;
@@ -7,10 +8,21 @@ body{
 	justify-content: center;
 	align-items: center;
 }
+**/
+
+body{
+	margin: 20px;
+	padding: 45px;
+	background: linear-gradient(to bottom right, #E3F0FF, #FAFCFF); 
+	height: 150vh;
+    /*display: flex; 
+	justify-content: center;
+	align-items: center;  */
+}
 
 .CartContainer{
-	width: 70%;
-	height: 90%;
+	width: 100%;
+	height: 100%;
 	background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0px 10px 20px #1687d933;
@@ -50,23 +62,25 @@ body{
 	align-items: center;
 }
 .image-box{
-	width: 15%;
+	width: 10%;
 	text-align: center;
 }
+
 .about{
-	height: 100%;
+	height: 60%;
 	width: 24%;
 }
+
 .title{
 	padding-top: 10px;
 	line-height: 10px;
-	font-size: 32px;
+	font-size: 20px;
 	font-family: 'Open Sans';
 	font-weight: 800;
 	color: #202020;
 }
 .subtitle{
-	line-height: 10px;
+	line-height: 35px;
 	font-size: 15px;
 	font-family: 'Open Sans';
 	font-weight: 600;
@@ -161,7 +175,7 @@ hr{
 	line-height: 10px;
 }
 .total-amount{
-	font-size: 36px;
+	font-size: 22px;
 	font-family: 'Open Sans';
 	font-weight: 900;
 	color: #202020;

@@ -1,4 +1,4 @@
-const SweetBakeryDB = require('../models/sweetBakeryDB.model.js');
+const SweetBakeryDB = require('../models/sweetbakeryDB.model.js');
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 
 module.exports = async (req, res, next) => {

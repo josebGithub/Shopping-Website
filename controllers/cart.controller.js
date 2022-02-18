@@ -1,61 +1,26 @@
-const SweetBakeryDB = require('../models/sweetBakeryDB.model.js');
-const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
+const SweetBakeryDB = require('../models/sweetbakeryDB.model');
+const {User, Product, Order} = SweetBakeryDB.getModel();
+const ShoppingCart = require('../models/cart.model');
+const { redirect } = require('express/lib/response');
 
-module.exports = (req, res, next) => {
+module.exports =  async (req, res, next) => {
+
 console.log("Call cart.controller.js...");
+console.log("req.session.cart(should be empty) : ");
+console.log(req.session.cart);
 
-    if (!req.session.cart) {
-        let cart = new Cart({
-        sessionid: req.session.id,
-	    status: 'active',
-	    quantity: req.body.quantity,
-        total: req.body.quantity * req.body.price,
-        items:[{
-                sku: req.params.sku,
-                name: req.params.name,
-                description: req.params.description,
-                quantity: req.params.quantity,
-                price: req.params.price,
-            }],
-        });
+let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
 
-         console.log("items : "+req.body.sku);
- /**       let cart = new Cart({
-            status: 'active',
-            quantity: req.params.quantity,
-            total: req.params.quantity*req.params.price,
-            items:[{
-                id: req.params.id,
-                sku: req.params.sku,
-                name:req.params.name,
-                description: req.params.description,
-                quantity: req.params.quantity,
-                price: req.params.price
-        }],
-      }); */ 
 
-      req.session.cart = cart;
-    } else {
-            req.session.cart.quantity += req.params.quantity;
-            req.session.cart.items.push({
-            id: req.params.id,
-            sku: req.params.sku,
-            name:req.params.name,
-            description: req.params.description,
-            quantity: req.params.quantity,
-            price: req.params.price,
-        })
-    }
+const product = await Product.findById(req.body.id);
 
-    try {
-       // const savedCart = await cart.save();
-        console.log("Cart : "+req.session.cart);
-        res.redirect('/home/pastries')
+    if (!product)
+        return res.render('404View');
+  
+    cart.add(product, product.id, parseInt(req.body.quantity));
+    req.session.cart = cart;
+    console.log(req.session.cart);
+    res.redirect('/home/pastries');
        
-    } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
-    }
- 
  };
  

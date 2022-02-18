@@ -1,4 +1,4 @@
-const SweetBakeryDB = require('./sweetBakeryDB.model.js');
+const SweetBakeryDB = require('./sweetbakeryDB.model.js');
 
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 
@@ -9,7 +9,6 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 	await User.deleteMany({});
     await Product.deleteMany({});
     await Order.deleteMany({});
-    await Cart.deleteMany({});
     
 
 	let user1 = new User({
@@ -32,7 +31,7 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         sku: 'SKU110010',
         name: 'Croissant',
         description: 'Traditional Butter Croissant',
-        price: 5.60,
+        price: 5,
         quantity: 1,
         type: 'pastry',
         image: 'croissant.png'
@@ -42,7 +41,7 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         sku: 'SKU110011',
         name: 'Chocolate Cake',
         description: 'Chocolate Cake',
-        price: 6.80,
+        price: 6,
         quantity: 10,
         type: 'pastry',
         image: 'chocolatecake.png'

@@ -27,7 +27,8 @@ let productSchema = new Schema({
     sku: { type: String, required: true},
 	name: { type: String, required: true },
 	description: { type: String, required: true },
-    price: {type: mongoose.Types.Decimal128, required: true},
+   // price: {type: mongoose.Types.Decimal128, required: true},
+    price: {type: Number, required: true},
     quantity: {type: Number, required: true},
     type: {type: String, required:true},
     image: { type: String, required: true }
@@ -70,7 +71,7 @@ let orderSchema = new Schema({
             name:String,
             description: String,
             quantity: Number,
-            price: mongoose.Types.Decimal128,
+            price: mongoose.Types.Decimal128
         }],
         total: mongoose.Types.Decimal128
    }]
@@ -79,17 +80,12 @@ let orderSchema = new Schema({
 });
 
 let cartSchema = new Schema({
-    sessionid: { type: Number, required: true },
-	status: { type: String, required: true },
-	quantity: Number,
-    total: mongoose.Types.Decimal128,
-    items:[{
-        sku: String,
-        name:String,
-        description: String,
-        quantity: Number,
-        price: mongoose.Types.Decimal128,
-    }],
+    //sessionid: { type: Number, required: true },
+	quantity: {default: 0, type: Number, required: true},
+	totalQuantity: {default: 0, type: Number, required: true},
+    total: {default: 0, type: Number, required: true},
+    //total: {default: 0, type: mongoose.Types.Decimal128, required: true},
+    items:[]
 }, {
 	collection: 'cart'
 });
@@ -122,11 +118,11 @@ module.exports = {
 							productSchema);
             Order = connection.model("OrderModel", 
 							orderSchema);
-            Cart = connection.model("CartModel", 
-							cartSchema);
+           // Cart = connection.model("CartModel", 
+			//				cartSchema);
 
 		};
-		return {User, Product, Order, Cart};
+		return {User, Product, Order};
 	}
 };
 
