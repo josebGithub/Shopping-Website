@@ -10,7 +10,7 @@ var app = express();
 app.engine('handlebars', 
     handlebars({defaultLayout: 'navigationbar',
             helpers: {
-              shoppingCartPage : false
+              shoppingCartPage : false, convertToDecimal : function(val) {return val.toFixed(2);} 
             }}));
 app.set('view engine', 'handlebars');
 
