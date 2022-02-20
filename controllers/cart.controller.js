@@ -5,22 +5,26 @@ const { redirect } = require('express/lib/response');
 
 module.exports =  async (req, res, next) => {
 
-console.log("Call cart.controller.js...");
-console.log("req.session.cart(should be empty) : ");
-console.log(req.session.cart);
+    let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
 
-let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
+    try {
+        const product = await Product.findById(req.body.id);
 
-
-const product = await Product.findById(req.body.id);
-
-    if (!product)
-        return res.render('404View');
+        try {
+            if (!product)
+                return res.render('404View');
   
-    cart.add(product, product.id, parseInt(req.body.quantity));
-    req.session.cart = cart;
-    console.log(req.session.cart);
-    res.redirect('/home/pastries');
+            cart.add(product, parseInt(req.body.quantity));
+            req.session.cart = cart;
+            res.redirect('/home/pastries');
+        } catch (err) {
+            console.log("Error adding the item to the cart : %s ", err);
+            console.error(err);
+        }
+    } catch (err) {
+        console.log("Error rendering to shopping cart page : %s ", err);
+        console.error(err);
+    }
        
- };
+};
  
