@@ -6,15 +6,8 @@ var displayHomePage 	= require("./home.controller");
 var displayPastriesPage   = require("./pastries.controller");
 var addProductToCart = require("./cart.controller");
 var showShoppingCart = require("./shoppingcart.controller");
+var orderController = require("./order.controller");
 
-/** 
-var addEmployee 		= require("./addEmployee");
-var saveEmployee 		= require("./saveEmployee");
-var editEmployee 		= require("./editEmployee");
-var saveAfterEdit 	    = require("./saveAfterEdit");
-var deleteEmployee 		= require("./deleteEmployee");
-var deleteEmployeeAfterConfirm 	= require("./deleteEmployeeAfterConfirm");
-*/
 
 // router specs
 router.get('/', function(req, res, next) {
@@ -26,6 +19,9 @@ router.get('/home/pastries', 			    displayPastriesPage);
 router.post('/home/pastries/add',           addProductToCart);
 router.get('/home/shopping-cart',           showShoppingCart);
 router.get('/home/pastries/add/:id',          addProductToCart);
+router.post('/home/checkout',                 orderController.postOrder);
+router.get('/home/orders',            orderController.getOrders);
+router.get('/home/orders:orderid',     orderController.getOrderHistory);
 
 /** 
 router.get('/employees/add', 				addEmployee);

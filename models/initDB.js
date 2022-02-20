@@ -1,8 +1,7 @@
-const SweetBakeryDB = require('./sweetbakeryDB.model.js');
 
+const SweetBakeryDB = require('./sweetbakeryDB.model.js');
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 
-//const {User, Product//} = SweetBakeryDB.getModel();
 
 (async() => {
 
@@ -27,21 +26,23 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         type: 'admin'
 	}); 
 
+    let product1Price = parseFloat(5.30);
     let product1 = new Product({
         sku: 'SKU110010',
         name: 'Croissant',
         description: 'Traditional Butter Croissant',
-        price: 5,
-        quantity: 1,
+        price: product1Price,
+        quantity: 10,
         type: 'pastry',
         image: 'croissant.png'
 	}); 
 
+    let product2Price = parseFloat(6.62);
     let product2 = new Product({
         sku: 'SKU110011',
         name: 'Chocolate Cake',
         description: 'Chocolate Cake',
-        price: 6,
+        price: product2Price,
         quantity: 10,
         type: 'pastry',
         image: 'chocolatecake.png'

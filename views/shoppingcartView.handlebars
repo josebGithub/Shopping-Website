@@ -1,3 +1,8 @@
+
+
+
+<div>
+ <form method="POST" action="checkout">
     <div class="CartContainer">
         <div class="Header">
             <h3 class="Heading">Shopping Cart</h3>
@@ -6,19 +11,22 @@
         {{#each data.items}}
             <div class="Cart-Items">
                 <div class="image-box">
-                    <img src="/images/{{this.image}}" style="height:40px" />
+                    <img src="/images/{{this.product.image}}" style="height:40px" />
                 </div>
                 <div class="about">
-                    <h2 class="title">{{this.name}}</h2>
-                    <h3 class="subtitle">{{this.description}}</h3>
+                    <h2 class="title">{{this.product.name}}</h2>
+                    <h3 class="subtitle">{{this.product.description}}</h3>
                 </div>
                 <div class="counter">
                     <div class="btn">+</div>
                     <div class="count">{{this.quantity}}</div>
                     <div class="btn">-</div>
                 </div>
+                <div class="about">
+                    <div class="title">Price : ${{convertToDecimal this.product.price}}</div>
+                </div>
                 <div class="prices">
-                    <div class="amount">{{this.price}}</div>
+                    <div class="amount">${{convertToDecimal this.total}}</div>
                     <div class="remove"><u>Remove</u></div>
                 </div>
             </div>
@@ -26,14 +34,17 @@
       <hr> 
       <div class="checkout">
       <div class="total">
+          <div class="total">
           <div>
               <div class="Subtotal">Total</div>
           </div>
           <div>
                <div class="total-amount">${{data.total}}</div>
           </div>
-         
       </div>
-      <button class="button">Checkout</button>
+      </div>
+      <button class="button" type="submit" value="Checkout">Checkout</button>
     </div>
+   </div>
+  </form>
  </div>

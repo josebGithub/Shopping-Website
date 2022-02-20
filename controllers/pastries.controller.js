@@ -11,7 +11,6 @@ module.exports = async (req, res, next) => {
             return res.render('404View');
 
         try {
-            console.log("Call pastriesView");
             let results = pastries.map( pastry => {
                 return {
                     id: pastry.id,

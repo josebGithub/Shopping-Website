@@ -11,12 +11,11 @@ module.exports =  async (req, res, next) => {
       if (!cart)
         return res.render('No item in shopping cart!');
 
-      console.log("Shopping Cart result : ");
-      console.log(cart);
+      
       res.render('shoppingcartView', {title:"Shopping Cart",
                  data: cart, shoppingCartPage:true});
     } catch (err) {
-        console.log("Error rendering to shopping cart page : %s ", err);
+        console.log("Error selecting : %s ", err);
         console.error(err);
     }
 }

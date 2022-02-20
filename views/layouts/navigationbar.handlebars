@@ -5,7 +5,9 @@
     {{#unless shoppingCartPage}}
 	    <link rel='stylesheet' type="text/css" href='/stylesheets/bootstrap.css'>
         <link rel="stylesheet" type="text/css" href="/css/home.css">
-        <link rel="stylesheet" type="text/css" href="/css/cart.css">
+        <link rel="stylesheet" type="text/css" href="/css/card.css">
+        <link rel="stylesheet" type="text/css" href="/css/order.css">
+        
     {{/unless}}
     {{#if shoppingCartPage}}
          <link rel='stylesheet' type="text/css" href='/stylesheets/bootstrap.css'>
@@ -27,6 +29,14 @@
      
                 <a href="#"><img src="/images/user.png" alt="user profile image"></a>
                 <a href="/home/shopping-cart"><img src="/images/cart.png" alt="shopping cart image"></a>
+                <div class="dropdown">
+                    <button class="dropbtn">Orders</button>
+                    <div class="dropdown-content">
+                    <a href="/home/orders">Order List</a>
+                    <a href="#">Link 2</a>
+                    <a href="#">Link 3</a>
+  </div>
+</div>
             </div>
     </div>
                 <ul class="links-container">
