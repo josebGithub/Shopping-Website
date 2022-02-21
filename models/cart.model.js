@@ -38,6 +38,13 @@ module.exports = function ShoppingCart(existCart)  {
             this.totalQuantity +=quantity;
             this.total += quantity * price;
     }
+
+
+    this.remove = function(id) {
+        this.totalQuantity -= this.items[id].quantity;
+        this.total -= this.items[id].quantity * this.items[id].product.price;
+        delete this.items[id];
+    }
 };
 
 /** 

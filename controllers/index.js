@@ -9,6 +9,7 @@ var showShoppingCart = require("./shoppingcart.controller");
 var orderController = require("./order.controller");
 
 
+
 // router specs
 router.get('/', function(req, res, next) {
   res.redirect('/home');
@@ -16,12 +17,13 @@ router.get('/', function(req, res, next) {
 
 router.get('/home', 						displayHomePage);
 router.get('/home/pastries', 			    displayPastriesPage);
-router.post('/home/pastries/add',           addProductToCart);
+router.post('/home/pastries/add',           addProductToCart)
 router.get('/home/shopping-cart',           showShoppingCart);
 router.get('/home/pastries/add/:id',          addProductToCart);
 router.post('/home/checkout',                 orderController.postOrder);
 router.get('/home/orders',            orderController.getOrders);
-router.get('/home/orders:orderid',     orderController.getOrderHistory);
+router.get('/home/orders/:orderid',     orderController.getOrderHistory);
+router.get('/home/remove/:productId',       orderController.removeItem);
 
 /** 
 router.get('/employees/add', 				addEmployee);

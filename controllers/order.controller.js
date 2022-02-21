@@ -36,13 +36,42 @@ exports.postOrder =  async (req, res, next) => {
                 const savedOrder = await userOrder.save();
             }
             //Cart.clearCart(cart, req.session.cart);
-            cart={};
-            req.session.cart={};
-            res.render('checkoutView', 
-                {title:"Checkout page",
-                 msg:'Your checkout is completed.'});
+            //Check the stocks in product collection
+            try {
+                var outOfStockProd=[];
+                console.log(cart);
+             //   for (const element of cart.items) {   //for array looping
+                for (const [key, value] of Object.entries(cart.items)) {
+                   let product = await Product.findOne({_id:key});
+                   if (product.quantity < value.quantity ) {
+                     // let outOfStockProd = { productName: product.name, productQty: product.quantity};
+                       outOfStockProd.push(product.name);
+                   }
+                } 
+            } catch (err) {
+                console.log("Error retrieving the product : %s ", err);
+                console.error(err);
+            }
+
+            if (outOfStockProd.length > 0) {
+                console.log(outOfStockProd);
+                    res.render('checkoutView', 
+                    {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
+            } else {
+                       
+                        for (const [key, value] of Object.entries(cart.items)) {
+                            let product = await Product.findOne({_id:key});
+                            product.quantity -= value.quantity;
+                            const editProductQty = await product.save();
+                        }
+                            cart={};
+                            req.session.cart={};
+                            res.render('checkoutView', 
+                                    {title:"Checkout page", msg:'Your checkout is completed.'});
+                   }
+           
         } catch (err){
-            console.log("Error updating the order : %s ", err);
+            console.log("Error adding the order : %s ", err);
             console.error(err);
         }
        
@@ -80,19 +109,27 @@ exports.getOrderHistory =  async (req, res, next) => {
 
     try {
             const orderId = req.params.orderid;
+            console.log("ORDERID : "+orderId);
             const order = await Order.findOne({userid:'user0001'});
            
            
             if (order) { 
                const orderList = order.orderList;
+
                for (const element of orderList) {
-                  if (element.orderId==orderId) {
-                      var items = element.items;
-                      var totalQuantity = element.totalQuantity;
-                      var total = element.total;
+                  if (element.orderId == orderId) {
+                     var totalQuantity = element.totalQuantity;
+                     var total = element.total;
+                     var items=[];
+                     for (const [key, value] of Object.entries(element.items)) {
+                            items.push(value);
+                            console.log(value);
+
+                     }
                   }
-              }
-               res.render('orderhistoryView', {title:"Order History Page", orderList: orderList, items:items, totalQty: totalQuantity, total:total});
+               }
+            
+               res.render('orderhistoryView', {title:"Order History Page", orderId:orderId, items:items, totalQty: totalQuantity, total:total, shoppingCartPage:true});
             }
             else {
                console.log("No orders");
@@ -103,5 +140,26 @@ exports.getOrderHistory =  async (req, res, next) => {
           console.error(err);
       }
 
+
+}
+
+
+exports.removeItem =  async (req, res, next) => {
+
+    let cart = new ShoppingCart(req.session.cart);
+    console.log("CART : ");
+    console.log(cart);
+    console.log(req.session.cart);
+
+    try {
+       // const product = await Product.findById(req.params.id);
+
+            cart.remove(req.params.productId);
+            req.session.cart = cart;
+            res.redirect('/home/shopping-cart');
+        } catch (err) {
+            console.log("Error remove the item from the cart : %s ", err);
+            console.error(err);
+        }
 
 }
