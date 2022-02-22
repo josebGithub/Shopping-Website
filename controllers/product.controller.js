@@ -83,8 +83,6 @@ exports.getProductList = async (req, res, next) => {
  
  exports.addProduct = async (req, res, next) => {
 
-    console.log('call addProduct controller');
-
         try {
             res.render('addProductView', {title:"Add a new product", admin: true});
         } catch (err) {

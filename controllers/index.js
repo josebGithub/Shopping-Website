@@ -20,10 +20,10 @@ router.get('/', function(req, res, next) {
 router.get('/home', 						displayHomePage);
 router.get('/home/login',                  userController.login);
 router.post('/home/auth',             userController.userAuth);
-router.get('/home/product/:type', 			    productController.getProductsDisplay);
+router.get('/home/products/:type', 			    productController.getProductsDisplay);
 router.get('/home/products',            productController.getProductList);
 router.get('/home/product/add',         productController.addProduct);
-router.post('/home/product/add/:id',          productController.saveProduct);
+router.post('/home/product/add',          productController.saveProduct);
 router.get('/home/product/edit/:id',            productController.editProduct);
 router.post('/home/product/edit/:id',          productController.saveEditProduct);
 router.get('/home/product/delete/:id',            productController.deleteProduct);
