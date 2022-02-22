@@ -33,7 +33,7 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         description: 'Traditional Butter Croissant',
         price: product1Price,
         quantity: 10,
-        type: 'pastry',
+        type: 'pastries',
         image: 'croissant.png'
 	}); 
 
@@ -44,7 +44,7 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         description: 'Chocolate Cake',
         price: product2Price,
         quantity: 10,
-        type: 'pastry',
+        type: 'pastries',
         image: 'chocolatecake.png'
 	}); 
 

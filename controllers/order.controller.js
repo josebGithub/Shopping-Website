@@ -7,20 +7,25 @@ const { redirect } = require('express/lib/response');
 exports.postOrder =  async (req, res, next) => {
 
     try {
+
+        if (!req.session.loggedin) {
+            let error = 'Please login into your account.';
+            return res.render('errorView', {title: 'Error Page', error});
+        }
         let cart = req.session.cart;
         
         if (!cart)
           return res.render('No item in shopping cart!');
 
         try {
-            const userOrder = await Order.findOne({userid:'user0001'});
+            const userOrder = await Order.findOne({userid: req.session.userid});
             //If findOne(), return an obj, check obj, !userOrder
             //If find(), return an array , check array, userOrder.length==0
          
             if (!userOrder) {
                 console.log("New Order");
-                let userid = "user0001";
-                let customerName = 'customer1';
+                let userid = req.session.userid;
+                let customerName = req.session.username;
                 let order = new Order ({ 
                     userid: userid,
                     customerName: customerName,
@@ -86,7 +91,7 @@ exports.postOrder =  async (req, res, next) => {
 exports.getOrders =  async (req, res, next) => {
 
     try {
-            const orders = await Order.findOne({userid:'user0001'});
+            const orders = await Order.findOne({userid: req.session.userid});
             //If findOne(), return an obj, check obj, !userOrder
             //If find(), return an array , check array, userOrder.length==0
             
@@ -110,7 +115,7 @@ exports.getOrderHistory =  async (req, res, next) => {
     try {
             const orderId = req.params.orderid;
             console.log("ORDERID : "+orderId);
-            const order = await Order.findOne({userid:'user0001'});
+            const order = await Order.findOne({userid:req.session.userid});
            
            
             if (order) { 
@@ -147,10 +152,6 @@ exports.getOrderHistory =  async (req, res, next) => {
 exports.removeItem =  async (req, res, next) => {
 
     let cart = new ShoppingCart(req.session.cart);
-    console.log("CART : ");
-    console.log(cart);
-    console.log(req.session.cart);
-
     try {
        // const product = await Product.findById(req.params.id);
 

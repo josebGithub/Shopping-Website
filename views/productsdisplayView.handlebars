@@ -1,0 +1,24 @@
+<section class="product-details">
+        {{#each data}}
+     <form method="POST" action="../../home/cart/add">
+        <div class="card">
+            <input type="hidden" name="id" value="{{this.id}}">
+            <input type="hidden" name="sku" value="{{this.sku}}">
+            <img src="/images/{{this.image}}" alt="{{this.image}}" style="width:30%">
+            <h1>{{ this.name }}</h1>
+            <p>${{ this.price }}</p>
+            <p>{{ this.description }}</p>
+            <label for="quantity">Quantity:</label>
+            <select name="quantity" id="quantity">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <p><button type="submit" value="Add to Cart">Add to Cart</button></p>
+        </div> 
+    </form>
+    {{/each}}
+    
+</section>    

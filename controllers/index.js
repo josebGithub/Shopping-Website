@@ -3,10 +3,12 @@ var router = express.Router();
 
 // other modules
 var displayHomePage 	= require("./home.controller");
-var displayPastriesPage   = require("./pastries.controller");
+var productController  = require("./product.controller");
 var addProductToCart = require("./cart.controller");
 var showShoppingCart = require("./shoppingcart.controller");
 var orderController = require("./order.controller");
+var userController = require("./user.controller");
+var productController = require("./product.controller");
 
 
 
@@ -16,14 +18,18 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/home', 						displayHomePage);
-router.get('/home/pastries', 			    displayPastriesPage);
-router.post('/home/pastries/add',           addProductToCart)
+router.get('/home/login',                  userController.login);
+router.post('/home/auth',             userController.userAuth);
+router.get('/home/product/:type', 			    productController.getProductsDisplay);
+router.get('/home/products',            productController.getProductList);
+router.post('/home/cart/add',           addProductToCart);
+router.get('/home/cart/add/:id',          addProductToCart);
 router.get('/home/shopping-cart',           showShoppingCart);
-router.get('/home/pastries/add/:id',          addProductToCart);
 router.post('/home/checkout',                 orderController.postOrder);
 router.get('/home/orders',            orderController.getOrders);
 router.get('/home/orders/:orderid',     orderController.getOrderHistory);
 router.get('/home/remove/:productId',       orderController.removeItem);
+
 
 /** 
 router.get('/employees/add', 				addEmployee);

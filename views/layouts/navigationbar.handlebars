@@ -7,6 +7,10 @@
         <link rel="stylesheet" type="text/css" href="/css/home.css">
         <link rel="stylesheet" type="text/css" href="/css/card.css">
         <link rel="stylesheet" type="text/css" href="/css/order.css">
+         <link rel="stylesheet" type="text/css" href="/css/table.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"> 
+        <link rel="stylesheet" type="text/css" href="/css/login.css">
+
         
     {{/unless}}
     {{#if shoppingCartPage}}
@@ -27,6 +31,7 @@
                     <button class="search-btn">search</button>
                 </div>
      
+                <a href="/home/login" class="link">Login</a>
                 <a href="#"><img src="/images/user.png" alt="user profile image"></a>
                 <a href="/home/shopping-cart"><img src="/images/cart.png" alt="shopping cart image"></a>
                 <div class="dropdown">
@@ -35,17 +40,29 @@
                     <a href="/home/orders">Order List</a>
                     <a href="#">Link 2</a>
                     <a href="#">Link 3</a>
-  </div>
-</div>
+                </div>
             </div>
+        </div>
     </div>
+              {{#if admin}}
+                <ul class="links-container">
+                    <li class="link-item"><a href="/home/products" class="link">products</a></li>
+                    <li class="link-item"><a href="/home/customers" class="link">customers</a></li>
+                    <li class="link-item"><a href="#" class="link">link3</a></li>
+                    <li class="link-item"><a href="#" class="link">link4</a></li>
+                    <li class="link-item"><a href="#" class="link">link5</a></li>
+                </ul>
+              {{/if}}
+
+              {{#unless admin}}
                 <ul class="links-container">
                     <li class="link-item"><a href="/home" class="link">home</a></li>
-                    <li class="link-item"><a href="/home/pastries" class="link">pastries</a></li>
+                    <li class="link-item"><a href="/home/product/pastries" class="link">pastries</a></li>
                     <li class="link-item"><a href="#" class="link">cakes</a></li>
                     <li class="link-item"><a href="#" class="link">pies</a></li>
                     <li class="link-item"><a href="#" class="link">cookies</a></li>
                 </ul>
+               {{/unless}}
   
 	<div class="panel-body">
 		{{{body}}}

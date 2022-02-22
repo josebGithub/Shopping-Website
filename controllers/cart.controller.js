@@ -16,7 +16,7 @@ module.exports =  async (req, res, next) => {
   
             cart.add(product, parseInt(req.body.quantity));
             req.session.cart = cart;
-            res.redirect('/home/pastries');
+            res.redirect('/home/product/'+product.type);
         } catch (err) {
             console.log("Error adding the item to the cart : %s ", err);
             console.error(err);

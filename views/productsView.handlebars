@@ -1,0 +1,31 @@
+<div>
+    <table>
+        <tr>
+            <th>Product Name</th>
+            <th>Product SKU</th>
+            <th>Product Description</th>
+            <th>Product Price</th>
+            <th>Product Quantity</th>
+            <th>Product Type</th>
+            <th>Product Image</th>
+            <th>Action</th>
+            <th>Action</th>
+            <th>Action</th>
+        </tr>
+        </tr>
+        {{#each data}}
+        <tr>
+            <td>{{this.name}}</td>
+            <td>{{this.sku}}</td>
+            <td>{{this.description}}</td>
+            <td>{{convertToDecimal this.price}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{this.type}}</td>
+            <td>{{this.image}}</td>
+            <td> <a href="/home/product/add/{{this.id}}">Add</a></td>
+            <td> <a href="/home/product/edit/{{this.id}}">Edit</a></td>
+            <td> <a href="/home/product/delete/{{this.id}}">Delete</a></td>
+        </tr>
+        {{/each}}
+    </table>
+</div>
