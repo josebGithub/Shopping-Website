@@ -22,6 +22,15 @@ router.get('/home/login',                  userController.login);
 router.post('/home/auth',             userController.userAuth);
 router.get('/home/product/:type', 			    productController.getProductsDisplay);
 router.get('/home/products',            productController.getProductList);
+router.get('/home/product/add',         productController.addProduct);
+router.post('/home/product/add/:id',          productController.saveProduct);
+router.get('/home/product/edit/:id',            productController.editProduct);
+router.post('/home/product/edit/:id',          productController.saveEditProduct);
+router.get('/home/product/delete/:id',            productController.deleteProduct);
+router.post('/home/product/delete/:id',          productController.saveDeleteProduct);
+
+
+
 router.post('/home/cart/add',           addProductToCart);
 router.get('/home/cart/add/:id',          addProductToCart);
 router.get('/home/shopping-cart',           showShoppingCart);

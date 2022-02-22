@@ -1,0 +1,57 @@
+<div>
+  <form method="post" action="add">
+    <table class="table table-condensed">
+      <tbody>
+       <h1>Add a new product</h1>
+         <input type="hidden" name="id" value="{{data.id}}">
+       <tr>
+         <th>SKU: </th>
+         <td><input type="text" name="sku" size="40" 
+                  value="{{data.sku}}"></td>
+       </tr>
+       <tr>
+         <th>Name: </th>
+         <td><input type="text" name="name" size="40" 
+                  value="{{data.name}}"></td>
+       </tr>
+        <tr>
+         <th>Description: </th>
+         <td><input type="text" name="description" size="40" 
+                  value="{{data.description}}"></td>
+        </tr>
+        <tr>
+         <th>Price: </th>
+         <td><input type="text" name="price" size="40" 
+                  value="{{data.price}}"></td>
+        </tr>
+         <tr>
+         <th>Quantity: </th>
+         <td><input type="text" name="quantity" size="40" 
+                  value="{{data.quantity}}"></td>
+        </tr>
+         <tr>
+         <th>Type: </th>
+         <td><input type="text" name="type" size="40" 
+                  value="{{data.type}}"></td>
+        </tr>
+         <tr>
+         <th>Image: </th>
+         <td><input type="text" name="image" size="40" 
+                  value="{{data.image}}"></td>
+        </tr>
+       
+       </tbody>
+      <tfooter>
+        <tr>
+          <td></td>
+          <td>
+           <input type="submit" value="Save" 
+              class="btn btn-success">
+           <input type="button" value="Cancel" 
+              class="btn btn-danger" onclick="cancelAction()">
+          </td>
+        </tr>
+      </tfooter>
+    </table>
+  </form>
+</div>
