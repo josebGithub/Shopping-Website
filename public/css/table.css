@@ -25,6 +25,14 @@ table {
 	text-align: center;
 	color: black;
 	margin-bottom: 16px;
-}
+  }
+
+  h3 {
+	font-weight: bold;
+	font-size: 18px;
+	text-align: left;
+	color: blue;
+	margin-bottom: 16px;
+  }
 
   

@@ -23,7 +23,7 @@ exports.postOrder =  async (req, res, next) => {
             //If find(), return an array , check array, userOrder.length==0
          
             if (!userOrder) {
-                console.log("New Order");
+                //console.log("New Order");
                 let userid = req.session.userid;
                 let customerName = req.session.username;
                 let order = new Order ({ 
@@ -36,7 +36,7 @@ exports.postOrder =  async (req, res, next) => {
                 const savedOrder = await order.save();
             }
             else {
-                console.log("Add cart to order");
+               // console.log("Add cart to order");
                 userOrder.orderList.push(cart);
                 const savedOrder = await userOrder.save();
             }
@@ -44,7 +44,7 @@ exports.postOrder =  async (req, res, next) => {
             //Check the stocks in product collection
             try {
                 var outOfStockProd=[];
-                console.log(cart);
+               // console.log(cart);
              //   for (const element of cart.items) {   //for array looping
                 for (const [key, value] of Object.entries(cart.items)) {
                    let product = await Product.findOne({_id:key});

@@ -28,7 +28,7 @@ module.exports = function ShoppingCart(existCart)  {
         if (!this.items[id]) {
             this.items[id] = { product: {},
             quantity: 0,
-            total: 0,
+            total: 0,zf
             };
             this.items[id].product = product;
         } 
