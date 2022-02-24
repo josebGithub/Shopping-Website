@@ -10,8 +10,14 @@ var app = express();
 app.engine('handlebars', 
     handlebars({defaultLayout: 'navigationbar',
             helpers: {
-              admin:false, shoppingCartPage : false, convertToDecimal : function(val) {return val.toFixed(2);} 
-            }}));
+              admin:false, 
+              shoppingCartPage : false, 
+              convertToDecimal : function(val) {return val.toFixed(2);},
+              isSelected: function (val1, val2) {
+                return val1 === val2 ? 'selected' : ''; 
+              }
+            }
+          }));
 app.set('view engine', 'handlebars');
 
 app.use(bodyParser.urlencoded({ extended: false }));

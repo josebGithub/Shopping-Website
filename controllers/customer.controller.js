@@ -1,6 +1,7 @@
 const e = require('express');
 const SweetBakeryDB = require('../models/sweetbakeryDB.model.js');
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
+const ShoppingCart = require('../models/cart.model');
 
 exports.getCustomerList = async (req, res, next) => {
 
@@ -57,47 +58,7 @@ exports.getCustomerList = async (req, res, next) => {
  
  };
 
- /** 
- exports.getCustomerOrder = async (req, res, next) => {
-
-    try {
-            let orders = await Order.find({userid:req.params.id}).sort({date:-1});
-        
-            if (!orders) {
-                let error = 'No customer order found!';
-                return res.render('errorView', {title : 'Error Page', error});
-            }
-
-            try {
-                let results = orders.map( customerOrder => {
-                    return {
-                        customerid: customerOrder.userid,
-                        customername: customerOrder.customerName,
-                        orderList: customerOrder.orderList
-                    }
-                });
-
-                res.render('customerOrdersView', 
-                {title:"Customer Order List Page",
-                 data: results, admin: true});
-
-            } catch (err) {
-                console.log("Error selecting Order collection : %s ", err);
-                console.error(err);
-            }
-
-            res.render('customersView', 
-                {title:"Customer List Page",
-                 data: customers, admin: true});
-       
-        } catch (err) {
-         console.log("Error selecting User collection: %s ", err);
-         console.error(err);
-        }
  
- };
-**/
-
  exports.editOrder = async (req, res, next) => {
 
     try {
@@ -112,28 +73,21 @@ exports.getCustomerList = async (req, res, next) => {
         }
   
         try {
+                let customerOrder = order.orderList.find(orderlist => orderlist.orderId == orderID);
+                 
+                let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
+                for (const [key, value] of Object.entries(customerOrder.items)) {
+                    //let product = await Product.findOne({_id:key});
 
-            if (order) { 
-                const orderList = order.orderList;
- 
-                for (const element of orderList) {
-                   if (element.orderId == orderID) {
-                      var totalQuantity = element.totalQuantity;
-                      var orderDate = element.date;
-                      var total = element.total;
-                      var items=[];
-                      for (const [key, value] of Object.entries(element.items)) {
-                             items.push(value);
-                             console.log(value);
- 
-                      }
-                   }
+                    cart.add(value.product, value.quantity);
                 }
-            }
-            res.render('orderItemsView', {title:"Edit Customer Order"
-             ,userid: userID, orderid:orderID, orderdate: orderDate, items:items, totalQty: totalQuantity, total:total});
+                req.session.cart = cart;
+                
+                res.render('shoppingcartView', {title:"Shopping Cart",
+                        data: cart, action: 'update', shoppingCartPage:true});
+
         } catch (err) {
-            console.log("Error rendering to the order item list form : %s ", err);
+            console.log("Error selecting order list from order : %s ", err);
             console.error(err);
         } 
     } catch(err) {

@@ -1,8 +1,5 @@
-
-
-
 <div>
- <form method="POST" action="checkout">
+ <form method="POST" action="{{action}}">
     <div class="CartContainer">
         <div class="Header">
             <h3 class="Heading">Shopping Cart</h3>
@@ -18,9 +15,14 @@
                     <h3 class="subtitle">{{this.product.description}}</h3>
                 </div>
                 <div class="counter">
-                    <div class="btn">+</div>
-                    <div class="count">{{this.quantity}}</div>
-                    <div class="btn">-</div>
+                    <label for="quantity">Quantity:</label>
+                     <select name="quantity" id="quantity"  onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                        <option value="/home/cart/update/{{this.product._id}}/1" {{{isSelected this.quantity 1}}}>1</option>
+                        <option value="/home/cart/update/{{this.product._id}}/2" {{{isSelected this.quantity 2}}}>2</option>
+                        <option value="/home/cart/update/{{this.product._id}}/3" {{{isSelected this.quantity 3}}}>3</option>
+                        <option value="/home/cart/update/{{this.product._id}}/4" {{{isSelected this.quantity 4}}}>4</option>
+                        <option value="/home/cart/update/{{this.product._id}}/5" {{{isSelected this.quantity 5}}}>5</option>
+                    </select>  
                 </div>
                 <div class="about">
                     <div class="title">Price : ${{convertToDecimal this.product.price}}</div>
@@ -43,7 +45,7 @@
           </div>
       </div>
       </div>
-      <button class="button" type="submit" value="Checkout">Checkout</button>
+           <button class="button" type="submit" value="{{action}}">{{action}}</button>
     </div>
    </div>
   </form>

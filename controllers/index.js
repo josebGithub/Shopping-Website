@@ -4,12 +4,13 @@ var router = express.Router();
 // other modules
 var displayHomePage 	= require("./home.controller");
 var productController  = require("./product.controller");
-var addProductToCart = require("./cart.controller");
+//var addProductToCart = require("./cart.controller");
 var showShoppingCart = require("./shoppingcart.controller");
 var orderController = require("./order.controller");
 var userController = require("./user.controller");
 var productController = require("./product.controller");
 var customerController = require("./customer.controller");
+var cartController = require("./cart.controller");
 
 
 
@@ -33,19 +34,25 @@ router.post('/home/product/delete/:id',          productController.saveDeletePro
 
 
 //router for shopping cart and order
-router.post('/home/cart/add',           addProductToCart);
-router.get('/home/cart/add/:id',          addProductToCart);
+router.post('/home/cart/add',           cartController.addProductToCart);
+router.get('/home/cart/add/:id',          cartController.addProductToCart);
 router.get('/home/shopping-cart',           showShoppingCart);
 router.post('/home/checkout',                 orderController.postOrder);
 router.get('/home/orders',            orderController.getOrders);
 router.get('/home/orders/:orderid',     orderController.getOrderHistory);
 router.get('/home/remove/:productId',       orderController.removeItem);
+//router.post('/home/cart/update/:productId/:quantity',     cartController.updateProductToCart);
+router.get('/home/cart/update/:productId/:quantity',     cartController.updateProductToCart);
+//router.post('/home/cart/update',     cartController.updateProductToCart);
+//router.get('/home/cart/update',     cartController.updateProductToCart);
+//router.get('/home/cart/update',     showShoppingCart);
+
 
 //router for customer
 router.get('/home/customers',         customerController.getCustomerList);
 router.get('/home/customer/:id',       customerController.getCustomerOrderList);       
 router.get('/home/customer/order/edit/:userid/:orderid',         customerController.editOrder);
-router.get('/home/customer/order/item/edit/:userid/:orderid/:itemid',         customerController.editItem);
+//router.get('/home/customer/order/item/edit/:userid/:orderid/:itemid',         customerController.editItem);
 //router.post('/home/customer/order/edit/:userid/:orderid',           customerController.saveEditOrder);
 //router.get('/home/customer/order/delete/:id',         customerController.deleteOrder);
 //router.post('/home/customer/order/delete/:id',          customerController.saveDeleteOrder);

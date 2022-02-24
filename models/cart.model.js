@@ -3,7 +3,6 @@ const req = require("express/lib/request");
 
 
 module.exports = function ShoppingCart(existCart)  {
-  //  exports.cart = function ShoppingCart(existCart) {
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
@@ -23,12 +22,13 @@ module.exports = function ShoppingCart(existCart)  {
 
     this.add = (product , quantity) => {
        
-        let id = product.id;
-        let price = parseFloat(product.price.toString());
+        let id = product._id;
+        let price = parseFloat(product.price.toString()); 
+        console.log('Product Id '+id);
         if (!this.items[id]) {
             this.items[id] = { product: {},
             quantity: 0,
-            total: 0,zf
+            total: 0,
             };
             this.items[id].product = product;
         } 
@@ -39,6 +39,19 @@ module.exports = function ShoppingCart(existCart)  {
             this.total += quantity * price;
     }
 
+    this.update = (product , quantity) => {
+       
+        let id = product._id;
+        let price = parseFloat(product.price.toString());
+        console.log('Product Id '+id);
+        let difference = quantity - this.items[id].quantity;
+        
+            this.items[id].quantity+=difference;
+            this.items[id].total += difference * price;
+            this.totalQuantity +=difference;
+            this.total += difference * price;
+    }
+    
 
     this.remove = function(id) {
         this.totalQuantity -= this.items[id].quantity;

@@ -13,7 +13,7 @@ module.exports =  async (req, res, next) => {
 
       
       res.render('shoppingcartView', {title:"Shopping Cart",
-                 data: cart, shoppingCartPage:true});
+                 data: cart, action:'checkout', shoppingCartPage:true});
     } catch (err) {
         console.log("Error selecting : %s ", err);
         console.error(err);
