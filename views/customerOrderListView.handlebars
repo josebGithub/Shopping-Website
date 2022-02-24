@@ -11,10 +11,10 @@
         </tr>
         {{#each data}}
           <tr>
-            <td>{{this.orderId}}</td>
+            <td>{{this.orderid}}</td>
             <td>{{this.date}}</td>
-            <td> <a href="/home/customer/order/edit/{{@root.customerid}}/{{this.orderId}}">Edit</a></td>
-            <td> <a href="/home/customer/order/delete/{{@root.customerid}}/{{this.orderId}}">Delete</a></td>
+            <td> <a href="/home/customer/order/edit/{{@root.customerid}}/{{this.orderid}}">Edit</a></td>
+            <td> <a href="/home/customer/order/delete/{{@root.customerid}}/{{this.orderid}}">Delete</a></td>
           </tr>
         {{/each}}
     </table>

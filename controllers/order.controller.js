@@ -4,7 +4,7 @@ const ShoppingCart = require('../models/cart.model');
 const { redirect } = require('express/lib/response');
 var ObjectId = require('mongodb').ObjectID;
 
-
+//checkout the order
 exports.postOrder =  async (req, res, next) => {
 
     try {
@@ -15,32 +15,25 @@ exports.postOrder =  async (req, res, next) => {
         }
         let cart = req.session.cart;
         
+        console.log(cart);
+
         if (!cart)
           return res.render('No item in shopping cart!');
 
         try {
-            const userOrder = await Order.findOne({userid: req.session.userid});
+           // const userOrder = await Order.findOne({userid: req.session.userid});
             //If findOne(), return an obj, check obj, !userOrder
             //If find(), return an array , check array, userOrder.length==0
          
-            if (!userOrder) {
+            // newscheme if (!userOrder) {
                 //console.log("New Order");
-                let userid = req.session.userid;
-                let customerName = req.session.username;
-                let order = new Order ({ 
-                    userid: userid,
-                    customerName: customerName,
-                    orderList: []
-                });
-    
-                order.orderList.push(cart);
-                const savedOrder = await order.save();
-            }
-            else {
+                
+            //}
+            //else {
                // console.log("Add cart to order");
-                userOrder.orderList.push(cart);
-                const savedOrder = await userOrder.save();
-            }
+            //    userOrder.orderList.push(cart);
+            ///    const savedOrder = await userOrder.save();
+           // }
             //Cart.clearCart(cart, req.session.cart);
             //Check the stocks in product collection
             try {
@@ -65,6 +58,21 @@ exports.postOrder =  async (req, res, next) => {
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
             } else {
                        
+                let userid = req.session.userid;
+                let orderid = cart.orderId;
+                let orderdate = cart.date;
+                let customerName = req.session.username;
+                let order = new Order ({ 
+                            orderid: orderid,
+                            userid: userid,
+                            orderdate: orderdate,
+                            customerName: customerName,
+                            orderList: cart
+                        });
+    
+                    //order.orderList = cart;
+                    const savedOrder = await order.save();
+
                         for (const [key, value] of Object.entries(cart.items)) {
                             let product = await Product.findOne({_id:key});
                             product.quantity -= value.quantity;
@@ -88,7 +96,7 @@ exports.postOrder =  async (req, res, next) => {
       }
 }
 
-
+//get all orders for the user and list the orders for the user
 exports.getOrders =  async (req, res, next) => {
 
     try {
@@ -110,18 +118,21 @@ exports.getOrders =  async (req, res, next) => {
       }
 }
 
-
+//Get all the order items for the order for the user
 exports.getOrderHistory =  async (req, res, next) => {
 
     try {
             const orderId = req.params.orderid;
             console.log("ORDERID : "+orderId);
-            const order = await Order.findOne({userid:req.session.userid});
+           // const order = await Order.findOne({userid:req.session.userid});
+           //New skin
+           const order = await Order.findOne({orderid: orderId});
            
            
             if (order) { 
                const orderList = order.orderList;
 
+               /** 
                for (const element of orderList) {
                   if (element.orderId == orderId) {
                      var totalQuantity = element.totalQuantity;
@@ -132,7 +143,19 @@ exports.getOrderHistory =  async (req, res, next) => {
                             console.log(value);
 
                      }
-                  }
+                  }   */
+
+                 
+                    if (orderList.orderId == orderId) {
+                       var totalQuantity = orderList.totalQuantity;
+                       var total = orderList.total;
+                       var items=[];
+                       for (const [key, value] of Object.entries(orderList.items)) {
+                              items.push(value);
+                              console.log(value);
+  
+                       }
+                    
                }
             
                res.render('orderhistoryView', {title:"Order History Page", orderId:orderId, items:items, totalQty: totalQuantity, total:total, shoppingCartPage:true});
@@ -183,43 +206,47 @@ exports.updateOrder =  async (req, res, next) => {
           return res.render('No item in shopping cart!');
 
         try {
-            const userOrder = await Order.findOne({userid: req.session.userid});
+            const oldOrder = await Order.findOne({orderid: cart.orderId});
 
-            userOrder.remove();
+           // console.log (oldOrder._id);
+          //  console.log (cart.orderId);
            
-            if (!userOrder) {
+            if (!oldOrder) {
                 let error = 'order.controller.updateOrder: No order found!';
                 res.render('errorView', error);
             }
 
-            let customerOrder = userOrder.orderList.find(orderlist => orderlist.orderId == cart.orderId);
-
-            
-            let orderListIndex = userOrder.orderList.findIndex(orderlist => orderlist.orderId == cart.orderId);
+           // let customerOrder = userOrder.orderList.find(orderlist => orderlist.orderId == cart.orderId); 
+           // let orderListIndex = userOrder.orderList.findIndex(orderlist => orderlist.orderId == cart.orderId);
             
             // Update return inventory
-            for (const [key, value] of Object.entries(customerOrder.items)) {
+            for (const [key, value] of Object.entries(oldOrder.orderList.items)) {
                 var product = await Product.findOne({_id:key});
                 product.quantity +=value.quantity;
                 const editProductQty = await product.save();
             }
+            
+            var userid = oldOrder.userid;
+            var orderid = oldOrder.orderid;
+            var orderdate = oldOrder.orderdate;
+            var customerName = oldOrder.customerName;
 
+            //remove the old order from db 
+            oldOrder.remove();
+
+            //create a new order with the old orderid
+            
+          
+
+               // cart={};
+              //  req.session.cart={};
+                
            // delete customerOrder.items;
             //customerOrder = cart;
-            userOrder.orderList[orderListIndex]=cart;
-
-            console.log('USERORDER');
-            console.log(userOrder);
-            console.log('CART : ');
-            console.log(cart);
-            console.log('CUSTOMER_ORDER : ');
-            console.log(userOrder);
-
-            console.log('id : ', userOrder._id);
-
+            //userOrder.orderList[orderListIndex]=cart;
            
 
-          //  userOrder.update({"_id":ObjectId(userOrder._id)},{"$pull":{"orderList":{orderId: "WPN-1645693764339"}}});
+           // userOrder.update({"_id":userOrder._id},{"$pull":{"orderList":{orderId: "WPN-1645693764339"}}});
             //Order.update({"_id:":userOrder._id}, {$unset : {"orderList.0" : 1 }});
           //  Order.update({"_id:":ObjectId("621741dcd40da387489093c2")}, {$unset : {"orderList.0" : 1 }});
           //  Order.update({"_id:":ObjectId(userOrder._id)}, {$pull:{"orderList":null}});
@@ -250,9 +277,19 @@ exports.updateOrder =  async (req, res, next) => {
                 console.log(outOfStockProd);
                     res.render('checkoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
-            } else {
-                       
+            } else { 
                     try {
+
+                        let order = new Order ({ 
+                            orderid: orderid,
+                            userid: userid,
+                            orderdate: orderdate,
+                            customerName: customerName,
+                            orderList: cart
+                        });
+            
+                       // order.orderList.push(cart);
+                        const savedNewOrder = await order.save();
                         for (const [key, value] of Object.entries(cart.items)) {
                             let product = await Product.findOne({_id:key});
                             product.quantity -= value.quantity;
