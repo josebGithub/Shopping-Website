@@ -42,7 +42,16 @@ let productSchema = new Schema({
 let orderSchema = new Schema({
 	userid: { type: String, required: true },
 	customerName: { type: String, required: true },
-    orderList : []
+    orderList : [
+		/*
+		{
+		totalQuantity: {type: Number},
+		total: {type: Number},
+		items: {},
+		date: {type: Date},
+		orderId: {type:String}
+		}*/
+	]
    }, {
 	collection: 'order'
 });

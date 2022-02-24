@@ -41,6 +41,7 @@ exports.updateProductToCart = async (req, res, next) => {
     try {
         let productId = req.params.productId;
         let itemQty = req.params.quantity;
+        let action = req.params.action;
        
         const product = await Product.findById(productId);
 
@@ -54,7 +55,7 @@ exports.updateProductToCart = async (req, res, next) => {
  
            // console.log('updateProductToCart : ');
            // console.log(cart);
-            res.redirect('/home/shopping-cart');
+                res.redirect('/home/shopping-cart/'+action);
         } catch (err) {
             console.log("Error updating the item to the cart : %s ", err);
             console.error(err);

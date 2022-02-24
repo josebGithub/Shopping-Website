@@ -6,6 +6,8 @@ const res = require('express/lib/response');
 
 module.exports =  async (req, res, next) => {
     try {
+
+      let action = req.params.action;
       let cart = new ShoppingCart(req.session.cart);
 
       if (!cart)
@@ -13,7 +15,7 @@ module.exports =  async (req, res, next) => {
 
       
       res.render('shoppingcartView', {title:"Shopping Cart",
-                 data: cart, action:'checkout', shoppingCartPage:true});
+                 data: cart, action: action, shoppingCartPage:true});
     } catch (err) {
         console.log("Error selecting : %s ", err);
         console.error(err);

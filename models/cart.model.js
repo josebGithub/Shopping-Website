@@ -58,6 +58,15 @@ module.exports = function ShoppingCart(existCart)  {
         this.total -= this.items[id].quantity * this.items[id].product.price;
         delete this.items[id];
     }
+
+    this.updateOrderId = (orderId) => {
+      
+        this.orderId = orderId;
+    }
+    
+    
+    
+    
 };
 
 /** 

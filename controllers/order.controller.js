@@ -2,6 +2,7 @@ const SweetBakeryDB = require('../models/sweetbakeryDB.model');
 const {User, Product, Order} = SweetBakeryDB.getModel();
 const ShoppingCart = require('../models/cart.model');
 const { redirect } = require('express/lib/response');
+var ObjectId = require('mongodb').ObjectID;
 
 
 exports.postOrder =  async (req, res, next) => {
@@ -164,3 +165,109 @@ exports.removeItem =  async (req, res, next) => {
         }
 
 }
+
+
+exports.updateOrder =  async (req, res, next) => {
+
+
+        /** 
+        if (!req.session.loggedin) {
+            let error = 'Please login into your account.';
+            return res.render('errorView', {title: 'Error Page', error});
+        }
+        **/
+
+        let cart = req.session.cart;
+        
+        if (!cart)
+          return res.render('No item in shopping cart!');
+
+        try {
+            const userOrder = await Order.findOne({userid: req.session.userid});
+
+            userOrder.remove();
+           
+            if (!userOrder) {
+                let error = 'order.controller.updateOrder: No order found!';
+                res.render('errorView', error);
+            }
+
+            let customerOrder = userOrder.orderList.find(orderlist => orderlist.orderId == cart.orderId);
+
+            
+            let orderListIndex = userOrder.orderList.findIndex(orderlist => orderlist.orderId == cart.orderId);
+            
+            // Update return inventory
+            for (const [key, value] of Object.entries(customerOrder.items)) {
+                var product = await Product.findOne({_id:key});
+                product.quantity +=value.quantity;
+                const editProductQty = await product.save();
+            }
+
+           // delete customerOrder.items;
+            //customerOrder = cart;
+            userOrder.orderList[orderListIndex]=cart;
+
+            console.log('USERORDER');
+            console.log(userOrder);
+            console.log('CART : ');
+            console.log(cart);
+            console.log('CUSTOMER_ORDER : ');
+            console.log(userOrder);
+
+            console.log('id : ', userOrder._id);
+
+           
+
+          //  userOrder.update({"_id":ObjectId(userOrder._id)},{"$pull":{"orderList":{orderId: "WPN-1645693764339"}}});
+            //Order.update({"_id:":userOrder._id}, {$unset : {"orderList.0" : 1 }});
+          //  Order.update({"_id:":ObjectId("621741dcd40da387489093c2")}, {$unset : {"orderList.0" : 1 }});
+          //  Order.update({"_id:":ObjectId(userOrder._id)}, {$pull:{"orderList":null}});
+           // const updateCustomerOrder = await userOrder.save();
+
+        } catch (err) {
+            console.log("order.controller.updateOrder : Error retrieving the user order : %s ", err);
+            console.error(err);
+        }
+
+            try {
+                var outOfStockProd=[];
+               // console.log(cart);
+             //   for (const element of cart.items) {   //for array looping
+                for (const [key, value] of Object.entries(cart.items)) {
+                   let product = await Product.findOne({_id:key});
+                   if (product.quantity < value.quantity ) {
+                     // let outOfStockProd = { productName: product.name, productQty: product.quantity};
+                       outOfStockProd.push(product.name);
+                   }
+                } //for
+            } catch (err) {
+                console.log("order.controller.updateOrder : Error retrieving the product : %s ", err);
+                console.error(err);
+            }
+
+            if (outOfStockProd.length > 0) {
+                console.log(outOfStockProd);
+                    res.render('checkoutView', 
+                    {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
+            } else {
+                       
+                    try {
+                        for (const [key, value] of Object.entries(cart.items)) {
+                            let product = await Product.findOne({_id:key});
+                            product.quantity -= value.quantity;
+                            const editProductQty = await product.save();
+                        } //for 
+                            cart={};
+                            req.session.cart={};
+                            res.render('checkoutView', 
+                                    {title:"Checkout page", msg:'Your checkout is completed.'});
+                    } catch (err) {
+                        console.log("order.controller.updateOrder : Error retrieving the product : %s ", err);
+                        console.error(err);
+                    }
+
+                } //else
+        
+}
+    

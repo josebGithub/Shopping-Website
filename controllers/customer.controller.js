@@ -58,7 +58,7 @@ exports.getCustomerList = async (req, res, next) => {
  
  };
 
- 
+
  exports.editOrder = async (req, res, next) => {
 
     try {
@@ -81,7 +81,9 @@ exports.getCustomerList = async (req, res, next) => {
 
                     cart.add(value.product, value.quantity);
                 }
+                cart.updateOrderId(orderID);
                 req.session.cart = cart;
+                req.session.userid = userID;
                 
                 res.render('shoppingcartView', {title:"Shopping Cart",
                         data: cart, action: 'update', shoppingCartPage:true});

@@ -17,11 +17,11 @@
                 <div class="counter">
                     <label for="quantity">Quantity:</label>
                      <select name="quantity" id="quantity"  onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                        <option value="/home/cart/update/{{this.product._id}}/1" {{{isSelected this.quantity 1}}}>1</option>
-                        <option value="/home/cart/update/{{this.product._id}}/2" {{{isSelected this.quantity 2}}}>2</option>
-                        <option value="/home/cart/update/{{this.product._id}}/3" {{{isSelected this.quantity 3}}}>3</option>
-                        <option value="/home/cart/update/{{this.product._id}}/4" {{{isSelected this.quantity 4}}}>4</option>
-                        <option value="/home/cart/update/{{this.product._id}}/5" {{{isSelected this.quantity 5}}}>5</option>
+                        <option value="/home/cart/update/{{this.product._id}}/1/{{@root.action}}" {{{isSelected this.quantity 1}}}>1</option>
+                        <option value="/home/cart/update/{{this.product._id}}/2/{{@root.action}}" {{{isSelected this.quantity 2}}}>2</option>
+                        <option value="/home/cart/update/{{this.product._id}}/3/{{@root.action}}" {{{isSelected this.quantity 3}}}>3</option>
+                        <option value="/home/cart/update/{{this.product._id}}/4/{{@root.action}}" {{{isSelected this.quantity 4}}}>4</option>
+                        <option value="/home/cart/update/{{this.product._id}}/5/{{@root.action}}" {{{isSelected this.quantity 5}}}>5</option>
                     </select>  
                 </div>
                 <div class="about">

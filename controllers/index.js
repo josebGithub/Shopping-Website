@@ -36,13 +36,14 @@ router.post('/home/product/delete/:id',          productController.saveDeletePro
 //router for shopping cart and order
 router.post('/home/cart/add',           cartController.addProductToCart);
 router.get('/home/cart/add/:id',          cartController.addProductToCart);
-router.get('/home/shopping-cart',           showShoppingCart);
-router.post('/home/checkout',                 orderController.postOrder);
+router.get('/home/shopping-cart/:action',           showShoppingCart);
+router.post('/home/shopping-cart/checkout',                 orderController.postOrder);
+router.post('/home/shopping-cart/update',               orderController.updateOrder);
 router.get('/home/orders',            orderController.getOrders);
 router.get('/home/orders/:orderid',     orderController.getOrderHistory);
 router.get('/home/remove/:productId',       orderController.removeItem);
 //router.post('/home/cart/update/:productId/:quantity',     cartController.updateProductToCart);
-router.get('/home/cart/update/:productId/:quantity',     cartController.updateProductToCart);
+router.get('/home/cart/update/:productId/:quantity/:action',     cartController.updateProductToCart);
 //router.post('/home/cart/update',     cartController.updateProductToCart);
 //router.get('/home/cart/update',     cartController.updateProductToCart);
 //router.get('/home/cart/update',     showShoppingCart);
