@@ -17,7 +17,7 @@ exports.addProductToCart =  async (req, res, next) => {
                 return res.render('errorView');
             }
                 
-  
+            console.log('addProductToCart : ');
             cart.add(product, parseInt(req.body.quantity));
             req.session.cart = cart;
             res.redirect('/home/products/'+product.type);
@@ -34,8 +34,9 @@ exports.addProductToCart =  async (req, res, next) => {
 
 exports.updateProductToCart = async (req, res, next) => {
 
+    
     let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
-    //console.log('updateProductToCart : ');
+   
     //console.log(cart);
     
     try {
@@ -50,6 +51,7 @@ exports.updateProductToCart = async (req, res, next) => {
                 return res.render('404View');
   
            // console.log(cart);
+           console.log('updateProductToCart : ');
             cart.update(product, parseInt(itemQty));
             req.session.cart = cart;
  

@@ -33,7 +33,6 @@ exports.getCustomerList = async (req, res, next) => {
          console.log("Error selecting User collection: %s ", err);
          console.error(err);
         }
- 
  };
 
 
@@ -93,8 +92,18 @@ exports.getCustomerList = async (req, res, next) => {
   
         try {
                // let customerOrder = order.orderList.find(orderlist => orderlist.orderId == orderID);
-                 
-                let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
+               var cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
+              
+               // if (req.session.cart && req.session.cart!={}) {
+                 //first time come here is 'undefined', second time cart should be empty  
+                
+               // if (typeof req.session.cart !== 'undefined' || req.session.cart !== {}){
+                 console.log('editOrder: ');
+                    console.log(req.session.cart);
+
+               // } else {
+
+            if (typeof req.session.cart === 'undefined' || typeof req.session.cart.totalQuantity === 'undefined'){    
                 for (const [key, value] of Object.entries(order.orderList.items)) {
                     //let product = await Product.findOne({_id:key});
 
@@ -104,11 +113,13 @@ exports.getCustomerList = async (req, res, next) => {
                 req.session.cart = cart;
                 req.session.userid = userID;
 
+                console.log('Edit Order: ');
                 console.log(cart);
+              } //if 
                 
                 res.render('shoppingcartView', {title:"Shopping Cart",
                         data: cart, userid: userID, action: 'update', shoppingCartPage:true});
-
+               
         } catch (err) {
             console.log("Error selecting order list from order : %s ", err);
             console.error(err);
@@ -172,7 +183,7 @@ exports.editItem = async (req , res , next) => {
     }      
 };
 
-
+/** 
 exports.editOrder = async (req, res, next) => {
 
     try {
@@ -239,16 +250,7 @@ exports.editItem = async (req , res , next) => {
         try {
             if (order) { 
                 const orderList = order.orderList;
-    /** 
-                for (const element of orderList) {
-                   if (element.orderId == orderID) {
-                      var totalQuantity = element.totalQuantity;
-                      var orderDate = element.date;
-                      var total = element.total;
-                      var item = element.items[itemID]
-                   }
-                }
-  */
+   
               
                     if (orderList.orderId == orderID) {
                        var totalQuantity = orderList.totalQuantity;
@@ -271,7 +273,7 @@ exports.editItem = async (req , res , next) => {
       console.error(err);
     }      
 };
-
+**/
 
 exports.deleteOrder =  async (req, res, next) => {
 

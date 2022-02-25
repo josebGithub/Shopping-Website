@@ -15,6 +15,7 @@ exports.postOrder =  async (req, res, next) => {
 
         let cart = req.session.cart;
         
+        console.log('POSTORDER:');
         console.log(cart);
 
         if (!cart)
@@ -267,6 +268,8 @@ exports.updateOrder =  async (req, res, next) => {
                     product.quantity -=value.quantity;
                     const editProductQty = await product.save();
                 }
+                cart={};
+                req.session.cart={};
                 console.log(outOfStockProd);
                     res.render('checkoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
@@ -297,6 +300,9 @@ exports.updateOrder =  async (req, res, next) => {
                         
                             cart={};
                             req.session.cart={};
+                            console.log('UpdateOrder: ');
+                            console.log(req.session.cart);
+                           // console.log(typeof req.sessoion.cart);
                             res.render('checkoutView', 
                                     {title:"Checkout page", msg:'Your checkout is completed.'});
                     } catch (err) {

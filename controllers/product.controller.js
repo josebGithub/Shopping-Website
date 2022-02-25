@@ -26,9 +26,21 @@ exports.getProductList = async (req, res, next) => {
                 }
             });
 
-            res.render('productsView', 
-                {title:"Product List Page",
-                 data:results, admin: true});
+
+            const accept=req.accepts(['html','json','xml']);
+                 res.format({
+                    'text/html' : () => {
+                         res.type('text/html');
+                         res.render('productsView', 
+                                {title:"Product List Page",
+                                data:results, admin: true});
+                        },
+             
+                    'application/json': () => {
+                         res.json(results);
+                     }
+                    });
+
         } catch (err) {
                 console.log("Error rendering to the Products Page : %s ", err);
                 console.error(err);

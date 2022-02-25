@@ -11,6 +11,7 @@ var userController = require("./user.controller");
 var productController = require("./product.controller");
 var customerController = require("./customer.controller");
 var cartController = require("./cart.controller");
+var restApiController = require("./restapi.controller");
 
 
 
@@ -54,5 +55,10 @@ router.get('/home/customer/order/delete/:userid/:orderid',         customerContr
 
 //router for user to search product on the website
 router.get('/products/search',             homeController.search);
+
+//router for REST APIs (json)
+router.get('/search/products',            restApiController.getAllProducts);
+router.get('/search/products/:name',            restApiController.getProductByName);
+router.get('/search/products/:price1/:price2',            restApiController.getProductsByPriceRange);
 
 module.exports = router;
