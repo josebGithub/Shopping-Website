@@ -14,8 +14,9 @@ app.engine('handlebars',
               shoppingCartPage : false, 
               convertToDecimal : function(val) {return val.toFixed(2);},
               isSelected: function (val1, val2) {
-                return val1 === val2 ? 'selected' : ''; 
-              }
+                return val1 === val2 ? 'selected' : '';},
+              isEqual: function(val1, val2, options) {
+                  return (val1 === val2)? options.fn(this) : options.inverse(this);}
             }
           }));
 app.set('view engine', 'handlebars');

@@ -7,12 +7,12 @@ var ObjectId = require('mongodb').ObjectID;
 //checkout the order
 exports.postOrder =  async (req, res, next) => {
 
-    try {
 
         if (!req.session.loggedin) {
             let error = 'Please login into your account.';
             return res.render('errorView', {title: 'Error Page', error});
         }
+
         let cart = req.session.cart;
         
         console.log(cart);
@@ -20,22 +20,6 @@ exports.postOrder =  async (req, res, next) => {
         if (!cart)
           return res.render('No item in shopping cart!');
 
-        try {
-           // const userOrder = await Order.findOne({userid: req.session.userid});
-            //If findOne(), return an obj, check obj, !userOrder
-            //If find(), return an array , check array, userOrder.length==0
-         
-            // newscheme if (!userOrder) {
-                //console.log("New Order");
-                
-            //}
-            //else {
-               // console.log("Add cart to order");
-            //    userOrder.orderList.push(cart);
-            ///    const savedOrder = await userOrder.save();
-           // }
-            //Cart.clearCart(cart, req.session.cart);
-            //Check the stocks in product collection
             try {
                 var outOfStockProd=[];
                // console.log(cart);
@@ -58,11 +42,12 @@ exports.postOrder =  async (req, res, next) => {
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
             } else {
                        
-                let userid = req.session.userid;
-                let orderid = cart.orderId;
-                let orderdate = cart.date;
-                let customerName = req.session.username;
-                let order = new Order ({ 
+               try {
+                    let userid = req.session.userid;
+                    let orderid = cart.orderId;
+                    let orderdate = cart.date;
+                    let customerName = req.session.username;
+                    let order = new Order ({ 
                             orderid: orderid,
                             userid: userid,
                             orderdate: orderdate,
@@ -82,31 +67,31 @@ exports.postOrder =  async (req, res, next) => {
                             req.session.cart={};
                             res.render('checkoutView', 
                                     {title:"Checkout page", msg:'Your checkout is completed.'});
-                   }
+               } catch (err) {
+                   let error = "order.controller.postOrder : Problem in saving the order to the database";
+                   res.render(error);
+               }
+            } //else
            
-        } catch (err){
-            console.log("Error adding the order : %s ", err);
-            console.error(err);
-        }
-       
-        // If the same user, then add the cart to orderList
-      } catch (err) {
-          console.log("Error selecting order : %s ", err);
-          console.error(err);
-      }
 }
 
 //get all orders for the user and list the orders for the user
 exports.getOrders =  async (req, res, next) => {
 
     try {
-            const orders = await Order.findOne({userid: req.session.userid});
+            const orders = await Order.find({userid: req.session.userid});
             //If findOne(), return an obj, check obj, !userOrder
             //If find(), return an array , check array, userOrder.length==0
             
-            if (orders) {
+            if (orders.length > 0) {
                //console.log("Order : "+orders.orderList[0].date);   
-               res.render('orderlistView', {title:"Order List Page", data:orders.orderList});
+               let results = orders.map( order => {
+                return {
+                   orderid : order.orderid,
+                    orderdate : order.orderdate
+                }
+                });
+               res.render('orderlistView', {title:"Order List Page", data: results});
             }
             else {
                console.log("No orders");
@@ -179,9 +164,10 @@ exports.removeItem =  async (req, res, next) => {
     try {
        // const product = await Product.findById(req.params.id);
 
+            let action = req.params.action;
             cart.remove(req.params.productId);
             req.session.cart = cart;
-            res.redirect('/home/shopping-cart');
+            res.redirect('/home/shopping-cart/'+action);
         } catch (err) {
             console.log("Error remove the item from the cart : %s ", err);
             console.error(err);
@@ -201,19 +187,22 @@ exports.updateOrder =  async (req, res, next) => {
         **/
 
         let cart = req.session.cart;
+
+        console.log('Update Order:');
+        console.log(cart);
         
         if (!cart)
           return res.render('No item in shopping cart!');
 
         try {
-            const oldOrder = await Order.findOne({orderid: cart.orderId});
+               var oldOrder = await Order.findOne({orderid: cart.orderId});
 
            // console.log (oldOrder._id);
           //  console.log (cart.orderId);
            
             if (!oldOrder) {
                 let error = 'order.controller.updateOrder: No order found!';
-                res.render('errorView', error);
+                return res.render('errorView', error);
             }
 
            // let customerOrder = userOrder.orderList.find(orderlist => orderlist.orderId == cart.orderId); 
@@ -231,8 +220,6 @@ exports.updateOrder =  async (req, res, next) => {
             var orderdate = oldOrder.orderdate;
             var customerName = oldOrder.customerName;
 
-            //remove the old order from db 
-            oldOrder.remove();
 
             //create a new order with the old orderid
             
@@ -274,6 +261,12 @@ exports.updateOrder =  async (req, res, next) => {
             }
 
             if (outOfStockProd.length > 0) {
+
+                for (const [key, value] of Object.entries(oldOrder.orderList.items)) {
+                    var product = await Product.findOne({_id:key});
+                    product.quantity -=value.quantity;
+                    const editProductQty = await product.save();
+                }
                 console.log(outOfStockProd);
                     res.render('checkoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
@@ -289,12 +282,19 @@ exports.updateOrder =  async (req, res, next) => {
                         });
             
                        // order.orderList.push(cart);
+                        //remove the old order from db 
+                        oldOrder.remove();
+
+                        //Add the updated order
                         const savedNewOrder = await order.save();
+
                         for (const [key, value] of Object.entries(cart.items)) {
                             let product = await Product.findOne({_id:key});
                             product.quantity -= value.quantity;
                             const editProductQty = await product.save();
                         } //for 
+
+                        
                             cart={};
                             req.session.cart={};
                             res.render('checkoutView', 
@@ -308,3 +308,4 @@ exports.updateOrder =  async (req, res, next) => {
         
 }
     
+
