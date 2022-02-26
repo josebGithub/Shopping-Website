@@ -6,10 +6,10 @@
             <h3 class="Heading">Shopping Cart</h3>
           {{else}}
              <h4>Order Id : {{data.orderId}} <h4> 
-             <h4> User Id : {{userid}}</h4>
+             <h4> User Id : {{data.userid}}</h4>
           {{/isEqual}}
 
-            <h5 class="Action">Remove all</h5>
+        <!--    <h5 class="Action">Remove all</h5>  -->
         </div>
         {{#each data.items}}
             <div class="Cart-Items">
@@ -52,6 +52,14 @@
       </div>
       </div>
            <button class="button" type="submit" value="{{action}}">{{action}}</button>
+          {{#isEqual action "checkout"}}  
+            <input class="button" type="button" value="Cancel"
+                  class="cancel" onclick="cancelCheckout()">
+          {{else}}
+            <input class="button" type="button" value="Cancel"
+                  class="cancel" onclick="cancelOrderUpdate()">
+          {{/isEqual}}
+          
     </div>
    </div>
   </form>

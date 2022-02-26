@@ -104,12 +104,13 @@ exports.getCustomerList = async (req, res, next) => {
                // } else {
 
             if (typeof req.session.cart === 'undefined' || typeof req.session.cart.totalQuantity === 'undefined'){    
-                for (const [key, value] of Object.entries(order.orderList.items)) {
+                for (const [key, value] of Object.entries(order.items)) {
                     //let product = await Product.findOne({_id:key});
 
                     cart.add(value.product, value.quantity);
                 }
                 cart.updateOrderId(orderID);
+                cart.userid = userID;
                 req.session.cart = cart;
                 req.session.userid = userID;
 
@@ -118,7 +119,7 @@ exports.getCustomerList = async (req, res, next) => {
               } //if 
                 
                 res.render('shoppingcartView', {title:"Shopping Cart",
-                        data: cart, userid: userID, action: 'update', shoppingCartPage:true});
+                        data: cart, userid: userID, action: 'update', shoppingCartPage:true, admin:true});
                
         } catch (err) {
             console.log("Error selecting order list from order : %s ", err);
@@ -131,107 +132,7 @@ exports.getCustomerList = async (req, res, next) => {
 
 };
 
-
-exports.editItem = async (req , res , next) => {
-
-    try {
-
-        let userID = req.params.userid;
-        let orderID = req.params.orderid;
-        let itemID = req.params.itemid;
-
-        const order = await Order.findOne({orderid: orderID});
-        
-        if (!order) {
-            let error = 'No orders are found!';
-            return res.render('errorView', {title : 'Error Page', error});
-        }
-  
-        try {
-            if (order) { 
-                const orderList = order.orderList;
-    /** 
-                for (const element of orderList) {
-                   if (element.orderId == orderID) {
-                      var totalQuantity = element.totalQuantity;
-                      var orderDate = element.date;
-                      var total = element.total;
-                      var item = element.items[itemID]
-                   }
-                }
-  */
-              
-                    if (orderList.orderId == orderID) {
-                       var totalQuantity = orderList.totalQuantity;
-                       var orderDate = orderList.date;
-                       var total = orderList.total;
-                       var item = orderList.items[itemID]
-                    }
-                 
-            }
-
-
-            res.render('editItemView', {title:"Edit item"
-             ,userid: userID, orderid:orderID, orderdate: orderDate, itemid: itemID, item:item, totalQty: totalQuantity, total:total});
-        } catch (err) {
-            console.log("Error updating the product: %s ", err);
-            console.error(err);
-        }
-    } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
-};
-
 /** 
-exports.editOrder = async (req, res, next) => {
-
-    try {
-
-        let userID = req.params.userid;
-        let orderID = req.params.orderid;
-       
-        //const order = await Order.findOne({userid: userID});
-
-         //new skin
-         const order = await Order.findOne({orderid: orderID});
-
-
-        if (!order) {
-            let error = 'No orders are found!';
-            return res.render('errorView', {title : 'Error Page', error});
-        }
-  
-        try {
-               // let customerOrder = order.orderList.find(orderlist => orderlist.orderId == orderID);
-                 
-                let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
-                for (const [key, value] of Object.entries(order.orderList.items)) {
-                    //let product = await Product.findOne({_id:key});
-
-                    cart.add(value.product, value.quantity);
-                }
-                cart.updateOrderId(orderID);
-                req.session.cart = cart;
-                req.session.userid = userID;
-
-                console.log(cart);
-                
-                res.render('shoppingcartView', {title:"Shopping Cart",
-                        data: cart, userid: userID, action: 'update', shoppingCartPage:true});
-
-        } catch (err) {
-            console.log("Error selecting order list from order : %s ", err);
-            console.error(err);
-        } 
-    } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
-
-};
-
-
 exports.editItem = async (req , res , next) => {
 
     try {
@@ -249,15 +150,12 @@ exports.editItem = async (req , res , next) => {
   
         try {
             if (order) { 
-                const orderList = order.orderList;
+                const items = order.items;
    
-              
-                    if (orderList.orderId == orderID) {
-                       var totalQuantity = orderList.totalQuantity;
-                       var orderDate = orderList.date;
-                       var total = orderList.total;
-                       var item = orderList.items[itemID]
-                    }
+                       var totalQuantity = items.totalQuantity;
+                       var orderDate = items.date;
+                       var total = items.total;
+                       var item = items[itemID]
                  
             }
 
@@ -297,5 +195,13 @@ exports.deleteOrder =  async (req, res, next) => {
         res.render('errorView', error);
     }
 
+
+}
+
+
+exports.cancelEditOrder = async (req , res , next) => {
+
+    req.session.cart = {};
+    res.redirect('/home/products');
 
 }

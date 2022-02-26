@@ -33,6 +33,7 @@ app.use(session({
     saveUninitialized: true
   }))
 
+
 // res.locals is an object passed to hbs engine
 app.use(function(req, res, next) {
     res.locals.session = req.session;
@@ -47,6 +48,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routing
 var routes = require('./controllers/index');
+const req = require('express/lib/request');
 app.use('/', routes);
 
 app.use(function(req, res) {

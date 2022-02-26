@@ -1,3 +1,8 @@
 <div>
-    <h1> Error : {{error}}</h1>
+    {{#isEqual type "msg"}}  
+        <h2>Message : {{error}}</h2>
+    {{else}}
+        <h2>Error : {{error}}</h2>
+    {{/isEqual}}
+ 
 </div>

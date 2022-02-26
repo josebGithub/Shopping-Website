@@ -36,7 +36,7 @@
 }
 
 .search-box{
-    width: 80%;
+   /* width: 80%; */
     height: 40px;
     padding: 10px;
     border-top-left-radius: 10px;
@@ -55,7 +55,7 @@
     border: none;
     outline: none;
     cursor: pointer;
-    background: #383838;
+    background: rgb(19, 235, 250);
     color: #fff;
   /*  text-transform: capitalize; */
     font-size: 15px;
@@ -96,4 +96,5 @@
 
 .link:hover{
     opacity: 1;
+    color : rgb(19, 235, 250);
 }

@@ -72,6 +72,7 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 
 	let currentUsers = await User.find({});
 
+
 	//console.log(currentUsers);
 
 	process.exit();

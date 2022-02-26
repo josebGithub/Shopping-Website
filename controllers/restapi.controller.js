@@ -27,7 +27,7 @@ exports.getAllProducts =  async (req, res, next) => {
             });
 
 
-            const accept=req.accepts(['html','json','xml']);
+            const accept=req.accepts(['html','json']);
                  res.format({
                     'application/json': () => {
                          res.json(results);
@@ -57,7 +57,7 @@ exports.getProductByName =  async (req, res, next) => {
             return res.render('errorView', {title : 'Error Page', error});
         }
 
-            const accept=req.accepts(['html','json','xml']);
+            const accept=req.accepts(['html','json']);
                  res.format({
                     'application/json': () => {
                          res.json(product);
@@ -80,7 +80,7 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
 
         let price1 = req.params.price1;
         let price2 = req.params.price2;
-        let products = await Product.find({price:{$gte:price1, $lte:price2}}).sort({price:1});;
+        let products = await Product.find({price:{$gte:price1, $lte:price2}}).sort({price:1});
 
         if (products.length == 0) {
             let error = 'No products found!';
@@ -101,7 +101,7 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
             });
 
 
-            const accept=req.accepts(['html','json','xml']);
+            const accept=req.accepts(['html','json']);
                  res.format({
                     'application/json': () => {
                          res.json(results);

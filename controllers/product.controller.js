@@ -26,8 +26,9 @@ exports.getProductList = async (req, res, next) => {
                 }
             });
 
-
-            const accept=req.accepts(['html','json','xml']);
+            console.log('getProductList : '+req.session.usertype);
+        
+                const accept=req.accepts(['html','json']);
                  res.format({
                     'text/html' : () => {
                          res.type('text/html');
@@ -42,12 +43,12 @@ exports.getProductList = async (req, res, next) => {
                     });
 
         } catch (err) {
-                console.log("Error rendering to the Products Page : %s ", err);
-                console.error(err);
+                let error = "Error rendering to the Products Page : %s"+err;
+                return res.render('errorView', {title: 'Error Page', type:'err', error: error});
         }
     } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
+        let error = "Error selecting : %s "+err;
+        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
     }
  
  };
@@ -95,13 +96,15 @@ exports.getProductList = async (req, res, next) => {
  
  exports.addProduct = async (req, res, next) => {
 
+   
+        console.log('authorize to access admin page');
         try {
             res.render('addProductView', {title:"Add a new product", admin: true});
         } catch (err) {
             console.log("Error rendering to the add product form: %s ", err);
             console.error(err);
         }
- 
+   
  };
  
  
@@ -117,51 +120,57 @@ exports.saveProduct = async (req , res , next) => {
         image: req.body.image
     }); 
   
-    try {
-      const savedProduct = await product.save();
-      res.redirect('/home/products');
-      //res.status(200).json(JSON.stringify(savedEmployee));
-    } catch (err) {
-      console.error(err);
-    }
+
+        try {
+            const savedProduct = await product.save();
+            res.redirect('/home/products');
+            //res.status(200).json(JSON.stringify(savedEmployee));
+        } catch (err) {
+            let error = "product.controller.saveProduct : Cannot save the product to database";
+            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+        }
+    
 };
 
 exports.editProduct = async (req, res, next) => {
 
     try {
-        const product = await Product.findById(req.params.id);
 
-        if (!product) {
-            let error = 'This product is not found!';
-            return res.render('errorView', {title : 'Error Page', error});
-        }
+            const product = await Product.findById(req.params.id);
+
+            if (!product) {
+                let error = 'This product is not found!';
+                return res.render('errorView', {title : 'Error Page', error});
+            }
   
-        try {
-            res.render('editProductView',
-            {title:"Edit a Product",
-             data: { id: product._id,
-                     sku: product.sku,
-                     name: product.name,
-                     description: product.description,
-                     price: product.price,
-                     quantity: product.quantity,
-                     type: product.type,
-                     image: product.image}
-             });
-        } catch (err) {
-            console.log("Error rendering to the edit product form : %s ", err);
-            console.error(err);
-        }
+            try {
+                res.render('editProductView',
+                    {title:"Edit a Product",
+                    data: { id: product._id,
+                            sku: product.sku,
+                            name: product.name,
+                            description: product.description,
+                            price: product.price,
+                            quantity: product.quantity,
+                            type: product.type,
+                            image: product.image},
+                            admin: true
+                    });
+            } catch (err) {
+                    let error = "Error rendering to the edit product form : %s "+err;
+                    return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+            } 
     } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
+        let error = "Error selecting : %s "+err;
+        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+    }    
 
 };
 
 
 exports.saveEditProduct = async (req , res , next) => {
 
+  
     try {
         const product = await Product.findById(req.body.id);
 
@@ -183,17 +192,19 @@ exports.saveEditProduct = async (req , res , next) => {
             const editProduct = await product.save();
             res.redirect('/home/products');
         } catch (err) {
-            console.log("Error updating the product: %s ", err);
-            console.error(err);
+            let error = "Error updating the product: %s  "+err;
+            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
         }
     } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
+        let error = "Error selecting : %s   "+err;
+        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+    }    
+  
 };
 
 exports.deleteProduct = async (req, res, next) => {
 
+  
     try {
         const product = await Product.findById(req.params.id);
 
@@ -212,21 +223,23 @@ exports.deleteProduct = async (req, res, next) => {
                      price: product.price,
                      quantity: product.quantity,
                      type: product.type,
-                     image: product.image}
+                     image: product.image},
+                     admin: true
              });
         } catch (err) {
-            console.log("Error rendering to the delete product form : %s ", err);
-            console.error(err);
+            let error = "Error rendering to the delete product form : %s  "+err;
+            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
         }
     } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
+        let error = "Error selecting : %s "+err;
+        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
     }      
-
+  
 };
 
 
 exports.saveDeleteProduct = async (req , res , next) => {
+
 
     try {
         const product = await Product.findById(req.body.id);
@@ -240,12 +253,13 @@ exports.saveDeleteProduct = async (req , res , next) => {
             const removeProduct = await product.remove();
             res.redirect('/home/products');
         } catch (err) {
-            console.log("Error updating the product: %s ", err);
-            console.error(err);
+            let error = "Error updating the product: %s  "+err;
+            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
         }
     } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
+          let error = "Error selecting : %s "+err;
+          return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+    }   
+
 };
 
