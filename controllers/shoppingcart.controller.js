@@ -10,15 +10,25 @@ module.exports =  async (req, res, next) => {
       let action = req.params.action;
 
       if (typeof req.session.cart === "undefined") {
-        let error = 'Empty shopping cart!';
-        return res.render('errorView', {title : 'Error Page', type: 'msg', error});
+        if (req.session.usertype === 'admin') {
+          let error = "Empty shopping cart!";
+          return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+        } else {
+          let error = "Empty shopping cart!";
+          return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+        }
       }
 
       let cart = new ShoppingCart(req.session.cart);
 
       if (!cart) {
-        let error = 'Empty shopping cart!';
-        return res.render('errorView', {title : 'Error Page', type: 'msg', error});
+        if (req.session.usertype === 'admin') {
+          let error = "Empty shopping cart!";
+          return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+        } else {
+          let error = "Empty shopping cart!";
+          return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+        }
       }
       
       if (action === 'checkout') 
@@ -29,7 +39,7 @@ module.exports =  async (req, res, next) => {
               data: cart, action: action, shoppingCartPage:true, admin: true});
       }
     } catch (err) {
-        console.log("Error selecting : %s ", err);
-        console.error(err);
+        let error = "shoppingcart.controller : Error to create a Shopping Cart : "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }
 }

@@ -45,11 +45,8 @@ exports.userAuth = async (req, res, next) => {
                         req.session.userid = user._id;
 
                         if (user.type === 'admin'){
-                            console.log('User type = admin');
                             req.session.usertype = 'admin';
                             res.redirect('/home/products');
-                           // res.render('adminView', {title:"Admin Page", admin:true});
-
                         }
                         else {
                             req.session.usertype = 'user';

@@ -30,8 +30,8 @@ exports.getCustomerList = async (req, res, next) => {
                  data: results, admin: true});
        
         } catch (err) {
-         console.log("Error selecting User collection: %s ", err);
-         console.error(err);
+            let error = "customer.controller.getCustomerList: Error selecting User collection: %s "+err;
+            return res.render('errorView', {title: 'Error Page', type: 'err', error});
         }
  };
 
@@ -42,8 +42,13 @@ exports.getCustomerList = async (req, res, next) => {
             let order = await Order.find({userid:req.params.id});
         
             if (order.length == 0) {
-                let error = 'No customer order found!';
-                return res.render('errorView', {title : 'Error Page', error});
+                if (req.session.usertype === 'admin') {
+                    let error = "No customer order found!";
+                    return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+                } else {
+                    let error = "No customer order found!";
+                    return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+                }
             }
 
             let results = order.map( userorder => {
@@ -53,20 +58,13 @@ exports.getCustomerList = async (req, res, next) => {
                 }
             });
 
-           // console.log(order);
-        //    console.log(results);
-
-              //  res.render('customerOrderListView', 
-           //     {title:"Customer Order List Page",
-             //    customerid: order.userid, customername: order.customerName, data: order.orderList, admin: true});
-
                  res.render('customerOrderListView', 
                  {title:"Customer Order List Page",
                   customerid: order[0].userid, customername: order[0].customerName, data: results, admin: true});
        
         } catch (err) {
-         console.log("Error selecting User collection: %s ", err);
-         console.error(err);
+            let error = "customer.controller.getCustomerOrderList : Error selecting User collection: %s "+err;
+            return res.render('errorView', {title: 'Error Page', type: 'err', error});
         }
  
  };
@@ -78,10 +76,7 @@ exports.getCustomerList = async (req, res, next) => {
 
         let userID = req.params.userid;
         let orderID = req.params.orderid;
-       
-        //const order = await Order.findOne({userid: userID});
 
-         //new skin
          const order = await Order.findOne({orderid: orderID});
 
 
@@ -90,25 +85,17 @@ exports.getCustomerList = async (req, res, next) => {
             return res.render('errorView', {title : 'Error Page', error});
         }
   
-        try {
                // let customerOrder = order.orderList.find(orderlist => orderlist.orderId == orderID);
                var cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
-              
-               // if (req.session.cart && req.session.cart!={}) {
-                 //first time come here is 'undefined', second time cart should be empty  
-                
-               // if (typeof req.session.cart !== 'undefined' || req.session.cart !== {}){
+
                  console.log('editOrder: ');
                     console.log(req.session.cart);
 
-               // } else {
-
             if (typeof req.session.cart === 'undefined' || typeof req.session.cart.totalQuantity === 'undefined'){    
                 for (const [key, value] of Object.entries(order.items)) {
-                    //let product = await Product.findOne({_id:key});
-
                     cart.add(value.product, value.quantity);
                 }
+
                 cart.updateOrderId(orderID);
                 cart.userid = userID;
                 req.session.cart = cart;
@@ -121,57 +108,13 @@ exports.getCustomerList = async (req, res, next) => {
                 res.render('shoppingcartView', {title:"Shopping Cart",
                         data: cart, userid: userID, action: 'update', shoppingCartPage:true, admin:true});
                
-        } catch (err) {
-            console.log("Error selecting order list from order : %s ", err);
-            console.error(err);
-        } 
     } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
+        let error = "customer.controller.editOrder : Error selecting order : %s "+err;
+        return res.render('errorView', {title: 'Error Page', type: 'err', error});
     }      
 
 };
 
-/** 
-exports.editItem = async (req , res , next) => {
-
-    try {
-
-        let userID = req.params.userid;
-        let orderID = req.params.orderid;
-        let itemID = req.params.itemid;
-
-        const order = await Order.findOne({orderid: orderID});
-        
-        if (!order) {
-            let error = 'No orders are found!';
-            return res.render('errorView', {title : 'Error Page', error});
-        }
-  
-        try {
-            if (order) { 
-                const items = order.items;
-   
-                       var totalQuantity = items.totalQuantity;
-                       var orderDate = items.date;
-                       var total = items.total;
-                       var item = items[itemID]
-                 
-            }
-
-
-            res.render('editItemView', {title:"Edit item"
-             ,userid: userID, orderid:orderID, orderdate: orderDate, itemid: itemID, item:item, totalQty: totalQuantity, total:total});
-        } catch (err) {
-            console.log("Error updating the product: %s ", err);
-            console.error(err);
-        }
-    } catch(err) {
-      console.log("Error selecting : %s ", err);
-      console.error(err);
-    }      
-};
-**/
 
 exports.deleteOrder =  async (req, res, next) => {
 
@@ -191,8 +134,8 @@ exports.deleteOrder =  async (req, res, next) => {
 
 
     } catch (err) {
-        let error = 'order.controller.deleteOrder: Cannot remove order from database!';
-        res.render('errorView', error);
+        let error = "order.controller.deleteOrder: Cannot remove order from database! "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error});
     }
 
 

@@ -8,11 +8,15 @@ exports.getProductList = async (req, res, next) => {
         let products = await Product.find({});
 
         if (!products) {
-            let error = 'No products found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            if (req.session.usertype === 'admin') {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+            } else {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+            }
         }
 
-        try {
             let results = products.map( product => {
                 return {
                     id: product.id,
@@ -42,13 +46,9 @@ exports.getProductList = async (req, res, next) => {
                      }
                     });
 
-        } catch (err) {
-                let error = "Error rendering to the Products Page : %s"+err;
-                return res.render('errorView', {title: 'Error Page', type:'err', error: error});
-        }
     } catch (err) {
-        let error = "Error selecting : %s "+err;
-        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+        let error = "Error selecting products: %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }
  
  };
@@ -61,8 +61,14 @@ exports.getProductList = async (req, res, next) => {
         let products = await Product.find({type: req.params.type});
 
         if (!products) {
-            let error = 'No products found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            if (req.session.usertype === 'admin') {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+            } else {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+            }
+           
         }
            
 
@@ -84,25 +90,23 @@ exports.getProductList = async (req, res, next) => {
                 {title:"Display Products Page",
                  data:results});
         } catch (err) {
-                console.log("Error rendering to the product Page : %s ", err);
-                console.error(err);
+                let error = "Error rendering to the product Page : %s "+err;
+                return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
     } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
+        let error = "Error selecting products: %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }
  
  };
  
  exports.addProduct = async (req, res, next) => {
 
-   
-        console.log('authorize to access admin page');
         try {
             res.render('addProductView', {title:"Add a new product", admin: true});
         } catch (err) {
-            console.log("Error rendering to the add product form: %s ", err);
-            console.error(err);
+            let error = "Error rendering to the add product form: %s"+err;
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
    
  };
@@ -124,10 +128,10 @@ exports.saveProduct = async (req , res , next) => {
         try {
             const savedProduct = await product.save();
             res.redirect('/home/products');
-            //res.status(200).json(JSON.stringify(savedEmployee));
+            //res.status(200).json(JSON.stringify(savedProduct));
         } catch (err) {
-            let error = "product.controller.saveProduct : Cannot save the product to database";
-            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+            let error = "product.controller.saveProduct : Cannot save the product to database %s"+err;
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
     
 };
@@ -139,8 +143,8 @@ exports.editProduct = async (req, res, next) => {
             const product = await Product.findById(req.params.id);
 
             if (!product) {
-                let error = 'This product is not found!';
-                return res.render('errorView', {title : 'Error Page', error});
+                let error = "This product is not found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
             }
   
             try {
@@ -157,12 +161,12 @@ exports.editProduct = async (req, res, next) => {
                             admin: true
                     });
             } catch (err) {
-                    let error = "Error rendering to the edit product form : %s "+err;
-                    return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+                let error = "Error rendering to the edit product form : %s "+err;
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
             } 
     } catch(err) {
-        let error = "Error selecting : %s "+err;
-        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+          let error = "Error selecting products: %s "+err;
+          return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }    
 
 };
@@ -175,8 +179,8 @@ exports.saveEditProduct = async (req , res , next) => {
         const product = await Product.findById(req.body.id);
 
         if (!product) {
-            let error = 'This product is not found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            let error = "This product is not found!";
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
         }
   
         try {
@@ -193,11 +197,11 @@ exports.saveEditProduct = async (req , res , next) => {
             res.redirect('/home/products');
         } catch (err) {
             let error = "Error updating the product: %s  "+err;
-            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
     } catch(err) {
-        let error = "Error selecting : %s   "+err;
-        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+        let error = "Error selecting the products: %s   "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }    
   
 };
@@ -209,8 +213,8 @@ exports.deleteProduct = async (req, res, next) => {
         const product = await Product.findById(req.params.id);
 
         if (!product) {
-            let error = 'This product is not found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            let error = "This product is not found!";
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
         }
   
         try {
@@ -228,11 +232,11 @@ exports.deleteProduct = async (req, res, next) => {
              });
         } catch (err) {
             let error = "Error rendering to the delete product form : %s  "+err;
-            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
     } catch(err) {
-        let error = "Error selecting : %s "+err;
-        return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+        let error = "Error selecting the products : %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }      
   
 };
@@ -245,8 +249,8 @@ exports.saveDeleteProduct = async (req , res , next) => {
         const product = await Product.findById(req.body.id);
 
         if (!product) {
-            let error = 'This product is not found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            let error = "This product is not found!";
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
         }
   
         try {
@@ -254,11 +258,11 @@ exports.saveDeleteProduct = async (req , res , next) => {
             res.redirect('/home/products');
         } catch (err) {
             let error = "Error updating the product: %s  "+err;
-            return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
     } catch(err) {
-          let error = "Error selecting : %s "+err;
-          return res.render('errorView', {title: 'Error Page', type:'err', error: error});
+        let error = "Error selecting the products: %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }   
 
 };

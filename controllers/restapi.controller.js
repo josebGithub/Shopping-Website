@@ -9,8 +9,13 @@ exports.getAllProducts =  async (req, res, next) => {
         let products = await Product.find({}).sort({_id:1});
 
         if (products.length == 0) {
-            let error = 'No products found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            if (req.session.usertype === 'admin') {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+            } else {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+            }
         }
 
             let results = products.map( product => {
@@ -35,8 +40,8 @@ exports.getAllProducts =  async (req, res, next) => {
                     });
 
     } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
+        let error = "Error selecting the products : %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
     }
  };
 
@@ -47,14 +52,17 @@ exports.getProductByName =  async (req, res, next) => {
     try {
 
         let pName = req.params.name
-        console.log(pName);
         let productName = pName.replace('_',' ');
-        console.log(productName);
         let product = await Product.findOne({name: productName});
 
         if (!product) {
-            let error = 'No products found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            if (req.session.usertype === 'admin') {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
+            } else {
+                let error = "No products found!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
+            }
         }
 
             const accept=req.accepts(['html','json']);
@@ -66,8 +74,8 @@ exports.getProductByName =  async (req, res, next) => {
             
 
     } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
+        let error = "Error selecting the products: %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
     }
  };
 
@@ -85,8 +93,8 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
         let products = await Product.find({price:{$gte:priceMin, $lte:priceMax}}).sort({price:1});
 
         if (products.length == 0) {
-            let error = 'No products found!';
-            return res.render('errorView', {title : 'Error Page', error});
+            let error = "No products found!";
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
         }
 
             let results = products.map( product => {
@@ -118,8 +126,8 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
                     });
 
     } catch (err) {
-         console.log("Error selecting : %s ", err);
-         console.error(err);
+        let error = "Error selecting the products : %s "+err;
+        return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
     }
  
  
@@ -131,12 +139,10 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
 exports.searchProductsByNameOrType = async (req, res, next) => {
 
     let searchText = req.query.search;
-    console.log(typeof searchText);
-    console.log("searchText = "+searchText);
 
     if (searchText==null) {
         let error = "Please enter your products for search";
-        return res.render('errorView', {title: 'Error Page', error});
+        return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
     }
 
     try {
@@ -150,8 +156,8 @@ exports.searchProductsByNameOrType = async (req, res, next) => {
             });
 
          if (products.length == 0) {
-             let error = "No products found";
-             return res.render('errorView', {title: 'Error Page', error});
+            let error = "No products found!";
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
          }
              
          try {
@@ -185,13 +191,13 @@ exports.searchProductsByNameOrType = async (req, res, next) => {
         
         } catch (err) {
             let error = "Error rendering to the product display Page : "+err;
-            return res.render('errorView', {title: 'Error Page', error});
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
         }
          
        
      } catch (err) {
-            let error = "Error selecting the products from product collection: "+err;
-            return res.render('errorView', {title: 'Error Page', error});
+          let error = "Error selecting the products from product collection: "+err;
+          return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
      }
  
  };

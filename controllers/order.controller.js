@@ -10,35 +10,30 @@ exports.postOrder =  async (req, res, next) => {
          console.log('POSTORDER :');
          console.log(req.session.loggedin);
         if (!req.session.loggedin) {
-            let error = 'Please login into your account.';
-            return res.render('errorView', {title: 'Error Page', error});
+            let error = "Please login into your account.";
+            return res.render('errorView', {title : 'Error Page', type: 'err', error});
         }
 
         let cart = req.session.cart;
-        
-        console.log('POSTORDER:');
-        console.log(cart);
 
         if (!cart) {
-            let error = 'No item in the shopping cart';
-            return res.render('errorView', {title: 'Error Page', error});
+            let error = "Empty shopping cart!";
+            return res.render('errorView', {title : 'Error Page', type: 'err', error});
         }
          
 
             try {
                 var outOfStockProd=[];
-               // console.log(cart);
-             //   for (const element of cart.items) {   //for array looping
+             
                 for (const [key, value] of Object.entries(cart.items)) {
                    let product = await Product.findOne({_id:key});
                    if (product.quantity < value.quantity ) {
-                     // let outOfStockProd = { productName: product.name, productQty: product.quantity};
                        outOfStockProd.push(product.name);
                    }
                 } 
             } catch (err) {
-                console.log("Error retrieving the product : %s ", err);
-                console.error(err);
+                let error = "order.controller.postOrder: Error retrieving the product : %s";
+                return res.render('errorView', {title : 'Error Page', type: 'err', error});
             }
 
             if (outOfStockProd.length > 0) {
@@ -66,7 +61,7 @@ exports.postOrder =  async (req, res, next) => {
     
                     console.log("Order ready to add to the DB");    
                     console.log(order);
-                    //order.orderList = cart;
+                  
                     const savedOrder = await order.save();
 
                         for (const [key, value] of Object.entries(cart.items)) {
@@ -79,8 +74,8 @@ exports.postOrder =  async (req, res, next) => {
                             res.render('checkoutView', 
                                     {title:"Checkout page", msg:'Your checkout is completed.'});
                } catch (err) {
-                   let error = "order.controller.postOrder : Problem in saving the order to the database";
-                   res.render(error);
+                    let error = "order.controller.postOrder : Problem in saving the order to the database : %s"+err;
+                    return res.render('errorView', {title : 'Error Page', type: 'err', error});
                }
             } //else
            
@@ -95,7 +90,7 @@ exports.getOrders =  async (req, res, next) => {
             //If find(), return an array , check array, userOrder.length==0
 
             if (orders.length > 0) {
-               //console.log("Order : "+orders.orderList[0].date);   
+             
                let results = orders.map( order => {
                 return {
                    orderid : order.orderid,
@@ -105,12 +100,12 @@ exports.getOrders =  async (req, res, next) => {
                res.render('orderlistView', {title:"Order List Page", data: results});
             }
             else {
-               let error = "You don't have any orders!";
-               return res.render('errorView', {title: 'Error Page', type:'msg', error: error});
+                let error = "You don't have any orders!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error});
             }
       } catch (err) {
-                let error = 'order.controller.getOrders : Error selectin order : %s '+err;
-                return res.render('errorView', {title: 'Error Page', type: 'err', error});
+                let error = "order.controller.getOrders : Error selectin order : %s "+err;
+                return res.render('errorView', {title : 'Error Page', type: 'err', error});
       }
 }
 
@@ -120,8 +115,7 @@ exports.getOrderHistory =  async (req, res, next) => {
     try {
             const orderId = req.params.orderid;
             console.log("ORDERID : "+orderId);
-           // const order = await Order.findOne({userid:req.session.userid});
-           //New skin
+          
            const order = await Order.findOne({orderid: orderId});
            
            
@@ -139,12 +133,12 @@ exports.getOrderHistory =  async (req, res, next) => {
                res.render('orderhistoryView', {title:"Order History Page", orderId:orderId, items:itemList, totalQty: totalQuantity, total:total, shoppingCartPage:true});
             }
             else {
-               console.log("No orders");
-               res.render('You don\'t have any orders');
+                let error = "You don't have any orders!";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
             }
       } catch (err) {
-          console.log("Error selecting order : %s ", err);
-          console.error(err);
+            let error = "Error selecting order : %s "+err;
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
       }
 
 
@@ -162,22 +156,14 @@ exports.removeItem =  async (req, res, next) => {
             req.session.cart = cart;
             res.redirect('/home/shopping-cart/'+action);
         } catch (err) {
-            console.log("Error remove the item from the cart : %s ", err);
-            console.error(err);
+            let error = "Error remove the item from the cart : %s  "+err;
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
 
 }
 
 
 exports.updateOrder =  async (req, res, next) => {
-
-
-        /** 
-        if (!req.session.loggedin) {
-            let error = 'Please login into your account.';
-            return res.render('errorView', {title: 'Error Page', error});
-        }
-        **/
 
         let cart = req.session.cart;
 
@@ -189,17 +175,11 @@ exports.updateOrder =  async (req, res, next) => {
 
         try {
                var oldOrder = await Order.findOne({orderid: cart.orderId});
-
-           // console.log (oldOrder._id);
-          //  console.log (cart.orderId);
            
             if (!oldOrder) {
-                let error = 'order.controller.updateOrder: No order found!';
-                return res.render('errorView', error);
+                let error = "No order found!  ";
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
             }
-
-           // let customerOrder = userOrder.orderList.find(orderlist => orderlist.orderId == cart.orderId); 
-           // let orderListIndex = userOrder.orderList.findIndex(orderlist => orderlist.orderId == cart.orderId);
             
             // Update return inventory
             for (const [key, value] of Object.entries(oldOrder.items)) {
@@ -216,24 +196,22 @@ exports.updateOrder =  async (req, res, next) => {
             var total = cart.total;
 
         } catch (err) {
-            console.log("order.controller.updateOrder : Error retrieving the user order : %s ", err);
-            console.error(err);
+            let error = "order.controller.updateOrder : Error retrieving the user order : %s"+err;
+            return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
         }
 
             try {
                 var outOfStockProd=[];
-               // console.log(cart);
-             //   for (const element of cart.items) {   //for array looping
+             
                 for (const [key, value] of Object.entries(cart.items)) {
                    let product = await Product.findOne({_id:key});
                    if (product.quantity < value.quantity ) {
-                     // let outOfStockProd = { productName: product.name, productQty: product.quantity};
                        outOfStockProd.push(product.name);
                    }
                 } //for
             } catch (err) {
-                console.log("order.controller.updateOrder : Error retrieving the product : %s ", err);
-                console.error(err);
+                let error = "order.controller.updateOrder : Error retrieving the product : %s "+err;
+                return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
             }
 
             if (outOfStockProd.length > 0) {
@@ -261,10 +239,10 @@ exports.updateOrder =  async (req, res, next) => {
                                 items: cart.items
                             });
                         
-                       // order.orderList.push(cart);
                         //remove the old order from db 
                         oldOrder.remove();
                           console.log('Order Update : '+order);
+
                         //Add the updated order
                         const savedNewOrder = await order.save();
 
@@ -279,12 +257,12 @@ exports.updateOrder =  async (req, res, next) => {
                             req.session.cart={};
                             console.log('UpdateOrder: ');
                             console.log(req.session.cart);
-                           // console.log(typeof req.sessoion.cart);
+                         
                             res.render('admincheckoutView', 
                                     {title:"Checkout page", msg:'Your checkout is completed.', admin: true});
                     } catch (err) {
-                        console.log("order.controller.updateOrder : Error retrieving the product : %s ", err);
-                        console.error(err);
+                        let error = "order.controller.updateOrder : Error retrieving the product : %s "+err;
+                        return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
                     }
 
                 } //else   
