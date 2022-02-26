@@ -34,23 +34,25 @@
                   </form>
                 </div>
      
-                <a href="/login" class="link">Login</a>
-                <a href="/logout" class="link">Logout</a>
-              <!--  <a href="#"><img src="/images/user.png" alt="user profile image"></a> -->
+              {{#if admin}}
+                   <a href="/login" class="link">Login</a>
+                   <a href="/logout" class="link">Logout</a>
+              {{/if}}
 
               {{#unless admin}}
+                   <div class="filterprice">
+                       <form method="GET" action="/search/products/price/range">
+                         <input type="number" name="minprice" id="minprice" placeholder="min price" required>
+                         <input type="number" name="maxprice" id="maxprice" placeholder="max price" required>
+                         <button class="filterprice-btn" type="submit">search</button>
+                       </form>
+                   </div>
+                  
+                  <div><a href="/login" class="link">Login</a></div>
+                  <div><a href="/logout" class="link">Logout</a></div>
                   <a href="/home/shopping-cart/checkout"><img src="/images/cart.png" alt="shopping cart image" title="Shopping cart"></a>
 
                    <a href="/home/orders"><img src="/images/order-history.png" alt="order history image" title="Order history"></a>
-
-              <!--
-                  <div class="dropdown">
-                    <button class="dropbtn">Orders</button>
-                    <div class="dropdown-content">
-                    <a href="/home/orders">Order List</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                  </div>   -->
               {{/unless}}
             </div>
         </div>

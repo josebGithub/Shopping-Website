@@ -59,13 +59,13 @@ router.get('/home/customer/order/delete/:userid/:orderid',      hasRoles(['admin
 router.get('/home/customer/order/cancel',   customerController.cancelEditOrder);
 
 //router for user to search product on the website
-router.get('/products/search',             homeController.search);
+router.get('/products/search',             restApiController.searchProductsByNameOrType );
 
 
 //router for REST APIs (json)
 router.get('/search/products',            restApiController.getAllProducts);
 router.get('/search/products/:name',            restApiController.getProductByName);
-router.get('/search/products/:price1/:price2',            restApiController.getProductsByPriceRange);
+router.get('/search/products/price/range',            restApiController.getProductsByPriceRange);
 
 
 module.exports = router;
