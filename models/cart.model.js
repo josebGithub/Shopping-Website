@@ -3,7 +3,6 @@ const req = require("express/lib/request");
 
 
 module.exports = function ShoppingCart(existCart)  {
-    console.log('Here models - cart');
 
     const formatData = (input) => {
         if (input > 9) {
@@ -41,7 +40,7 @@ module.exports = function ShoppingCart(existCart)  {
        
         let id = product._id;
         let price = parseFloat(product.price.toString()); 
-        console.log('Add: Product Id '+id);
+       
         if (!this.items[id]) {
             this.items[id] = { product: {},
             quantity: 0,
@@ -60,7 +59,7 @@ module.exports = function ShoppingCart(existCart)  {
        
         let id = product._id;
         let price = parseFloat(product.price.toString());
-        console.log('Update : Product Id '+id);
+       
         let difference = quantity - this.items[id].quantity;
         
             this.items[id].quantity+=difference;

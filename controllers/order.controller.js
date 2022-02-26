@@ -7,11 +7,9 @@ var ObjectId = require('mongodb').ObjectID;
 //checkout the order
 exports.postOrder =  async (req, res, next) => {
 
-         console.log('POSTORDER :');
-         console.log(req.session.loggedin);
         if (!req.session.loggedin) {
             let error = "Please login into your account.";
-            return res.render('errorView', {title : 'Error Page', type: 'err', error});
+            return res.render('errorView', {title : 'Error Page', type: 'msg', error});
         }
 
         let cart = req.session.cart;
@@ -37,7 +35,6 @@ exports.postOrder =  async (req, res, next) => {
             }
 
             if (outOfStockProd.length > 0) {
-                console.log(outOfStockProd);
                     res.render('checkoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
             } else {
@@ -58,9 +55,6 @@ exports.postOrder =  async (req, res, next) => {
                             customerName: customerName,
                             items: cart.items
                         });
-    
-                    console.log("Order ready to add to the DB");    
-                    console.log(order);
                   
                     const savedOrder = await order.save();
 
@@ -114,7 +108,6 @@ exports.getOrderHistory =  async (req, res, next) => {
 
     try {
             const orderId = req.params.orderid;
-            console.log("ORDERID : "+orderId);
           
            const order = await Order.findOne({orderid: orderId});
            
@@ -127,7 +120,6 @@ exports.getOrderHistory =  async (req, res, next) => {
                  var itemList=[];
                  for (const [key, value] of Object.entries(items)) {
                     itemList.push(value);
-                    console.log(value);
                 }
             
                res.render('orderhistoryView', {title:"Order History Page", orderId:orderId, items:itemList, totalQty: totalQuantity, total:total, shoppingCartPage:true});
@@ -166,9 +158,6 @@ exports.removeItem =  async (req, res, next) => {
 exports.updateOrder =  async (req, res, next) => {
 
         let cart = req.session.cart;
-
-        console.log('Update Order:'); 
-        console.log(cart);
         
         if (!cart)
           return res.render('No item in shopping cart!');
@@ -223,7 +212,6 @@ exports.updateOrder =  async (req, res, next) => {
                 }
                 cart={};
                 req.session.cart={};
-                console.log(outOfStockProd);
                     res.render('admincheckoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd, admin: true});
             } else { 
@@ -241,7 +229,6 @@ exports.updateOrder =  async (req, res, next) => {
                         
                         //remove the old order from db 
                         oldOrder.remove();
-                          console.log('Order Update : '+order);
 
                         //Add the updated order
                         const savedNewOrder = await order.save();
@@ -255,9 +242,7 @@ exports.updateOrder =  async (req, res, next) => {
                         
                             cart={};
                             req.session.cart={};
-                            console.log('UpdateOrder: ');
-                            console.log(req.session.cart);
-                         
+
                             res.render('admincheckoutView', 
                                     {title:"Checkout page", msg:'Your checkout is completed.', admin: true});
                     } catch (err) {

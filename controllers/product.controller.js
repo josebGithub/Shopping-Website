@@ -30,8 +30,6 @@ exports.getProductList = async (req, res, next) => {
                 }
             });
 
-            console.log('getProductList : '+req.session.usertype);
-        
                 const accept=req.accepts(['html','json']);
                  res.format({
                     'text/html' : () => {

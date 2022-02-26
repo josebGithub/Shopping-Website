@@ -34,10 +34,18 @@ exports.getAllProducts =  async (req, res, next) => {
 
             const accept=req.accepts(['html','json']);
                  res.format({
+                    'text/html' : () => {
+                        res.type('text/html');
+                        res.render('productsdisplayView', 
+                        {title:"Display Products Page",
+                         data:results});
+                    },
+
                     'application/json': () => {
                          res.json(results);
                      }
                     });
+
 
     } catch (err) {
         let error = "Error selecting the products : %s "+err;
@@ -53,20 +61,24 @@ exports.getProductByName =  async (req, res, next) => {
 
         let pName = req.params.name
         let productName = pName.replace('_',' ');
-        let product = await Product.findOne({name: productName});
+
+        let product = await Product.findOne( {name:{'$regex': productName, $options:"$i"}});
 
         if (!product) {
-            if (req.session.usertype === 'admin') {
                 let error = "No products found!";
-                return res.render('errorView', {title : 'Error Page', type: 'msg', error, admin:true}); 
-            } else {
-                let error = "No products found!";
-                return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
-            }
+                return res.render('errorView', {title : 'Error Page', type: 'msg', error});
         }
+
 
             const accept=req.accepts(['html','json']);
                  res.format({
+                    'text/html' : () => {
+                        res.type('text/html');
+                        res.render('productsdisplayView', 
+                        {title:"Display Products Page",
+                         data:product});
+                    },
+                    
                     'application/json': () => {
                          res.json(product);
                      }
@@ -86,10 +98,9 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
 
     try {
 
-        let priceMin = req.query.minprice;
-        let priceMax = req.query.maxprice;
+        let priceMin = req.query.minprice || req.params.minprice;
+        let priceMax = req.query.maxprice || req.params.maxprice;
        
-       // let products = await Product.find({price:{$gte:priceMin, $lte:priceMax}}).sort({price:1});
         let products = await Product.find({price:{$gte:priceMin, $lte:priceMax}}).sort({price:1});
 
         if (products.length == 0) {
@@ -138,22 +149,19 @@ exports.getProductsByPriceRange =  async (req, res, next) => {
  //Allow user to search for the products by product name or product type on the website
 exports.searchProductsByNameOrType = async (req, res, next) => {
 
-    let searchText = req.query.search;
-
-    if (searchText==null) {
-        let error = "Please enter your products for search";
-        return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 
-    }
+   
+        let searchText = req.query.search;
 
     try {
 
        //Search at two fields, 'name' and 'type' from the Product
-       var products = await Product.find({$or:
+            var products = await Product.find({$or:
                [
                    {name:{'$regex': searchText, $options:"$i"}},
                    {type:{'$regex': searchText, $options:"$i"}}
                 ]
             });
+       
 
          if (products.length == 0) {
             let error = "No products found!";
@@ -174,21 +182,10 @@ exports.searchProductsByNameOrType = async (req, res, next) => {
                 }
             });
 
-            const accept=req.accepts(['html','json']);
-            res.format({
-                'text/html' : () => {
-                    res.type('text/html');
                     res.render('productsdisplayView', 
                     {title:"Display Products Page",
                      data:results});
-                },
-
-               'application/json': () => {
-                    res.json(results);
-                }
-               });
-
-        
+              
         } catch (err) {
             let error = "Error rendering to the product display Page : "+err;
             return res.render('errorView', {title : 'Error Page', type: 'msg', error}); 

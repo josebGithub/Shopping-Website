@@ -13,7 +13,7 @@ var hasRoles = userController.roles;
 var productController = require("./product.controller");
 var customerController = require("./customer.controller");
 var cartController = require("./cart.controller");
-var restApiController = require("./restapi.controller");
+var searchController = require("./search.controller");
 //const req = require('express/lib/request');
 
 
@@ -58,14 +58,15 @@ router.get('/home/customer/order/edit/:userid/:orderid',    hasRoles(['admin']),
 router.get('/home/customer/order/delete/:userid/:orderid',      hasRoles(['admin']),    customerController.deleteOrder);
 router.get('/home/customer/order/cancel',   customerController.cancelEditOrder);
 
-//router for user to search product on the website
-router.get('/products/search',             restApiController.searchProductsByNameOrType );
+//router for user to search products on the website
+router.get('/search/products/name/type',             searchController.searchProductsByNameOrType );
+router.get('/search/products/price/range',             searchController.getProductsByPriceRange);
 
 
 //router for REST APIs (json)
-router.get('/search/products',            restApiController.getAllProducts);
-router.get('/search/products/:name',            restApiController.getProductByName);
-router.get('/search/products/price/range',            restApiController.getProductsByPriceRange);
+router.get('/search/products',             searchController.getAllProducts);
+router.get('/search/products/name/:name',            searchController.getProductByName);
+router.get('/search/products/minprice/:minprice/maxprice/:maxprice',             searchController.getProductsByPriceRange);
 
 
 module.exports = router;
