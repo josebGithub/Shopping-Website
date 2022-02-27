@@ -39,7 +39,8 @@ exports.getCustomerList = async (req, res, next) => {
  exports.getCustomerOrderList = async (req, res, next) => {
 
     try {
-            let order = await Order.find({userid:req.params.id});
+          
+           let order = await Order.find({userid:req.params.id}).sort({orderdate:-1});
         
             if (order.length == 0) {
                 if (req.session.usertype === 'admin') {

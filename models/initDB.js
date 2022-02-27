@@ -13,9 +13,9 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 	let user1 = new User({
 	    username: 'user1',
 	    password: 'user1pwd',
-        firstname: 'user1Firstname',
-        lastname: 'user1Lastname',
-        email: 'user1@test.com',
+        firstname: 'John',
+        lastname: 'Crayon',
+        email: 'johncrayon@test.com',
         address: '15 Forever Road, Dublin CA, 95890',
         type: 'user'
 	}); 
@@ -23,9 +23,9 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
     let user2 = new User({
 	    username: 'user2',
 	    password: 'user2pwd',
-        firstname: 'user2Firstname',
-        lastname: 'user2Lastname',
-        email: 'user2@test.com',
+        firstname: 'Ann',
+        lastname: 'Taylor',
+        email: 'anntaylor@test.com',
         address: '30 Tend Steet, San Jose CA, 92567',
         type: 'user'
 	}); 
@@ -33,33 +33,88 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
     let user3 = new User({
 	    username: 'admin1',
 	    password: 'admin1pwd',
-        firstname: 'admin1Firstname',
-        lastname: 'uadmin1Lastname',
+        firstname: 'Michael',
+        lastname: 'Smith',
         email: 'admin1@sweetbakery.com',
         address: '30 Terraced Circle, San Ramon CA, 94582',
         type: 'admin'
 	}); 
 
-    let product1Price = parseFloat(5.30);
+    let product1Price = parseFloat(5.50);
     let product1 = new Product({
         sku: 'SKU110010',
         name: 'Croissant',
         description: 'Traditional Butter Croissant',
         price: product1Price,
-        quantity: 10,
+        quantity: 50,
         type: 'pastries',
         image: 'croissant.png'
 	}); 
 
-    let product2Price = parseFloat(6.62);
+    let product2Price = parseFloat(6.30);
     let product2 = new Product({
         sku: 'SKU110011',
         name: 'Chocolate Cake',
         description: 'Chocolate Cake',
         price: product2Price,
-        quantity: 10,
+        quantity: 30,
         type: 'pastries',
         image: 'chocolatecake.png'
+	}); 
+
+    let product3Price = parseFloat(3.00);
+    let product3 = new Product({
+        sku: 'SKU110012',
+        name: 'Cheese Danish',
+        description: 'Creamy Cheese Danish',
+        price: product3Price,
+        quantity: 30,
+        type: 'pastries',
+        image: 'cheesedanish.png'
+	}); 
+
+    let product4Price = parseFloat(2.00);
+    let product4 = new Product({
+        sku: 'SKU110013',
+        name: 'Donut',
+        description: 'Plain Donut',
+        price: product3Price,
+        quantity: 3,
+        type: 'pastries',
+        image: 'donut.png'
+	}); 
+
+    let product5Price = parseFloat(1.50);
+    let product5 = new Product({
+        sku: 'SKU110014',
+        name: 'Butter Cookie',
+        description: 'Light Butter Cookie',
+        price: product3Price,
+        quantity: 30,
+        type: 'cookies',
+        image: 'buttercookie.png'
+	}); 
+
+    let product6Price = parseFloat(2.00);
+    let product6 = new Product({
+        sku: 'SKU110015',
+        name: 'Chocolate Cookie',
+        description: 'Chocolate Chips Cookie',
+        price: product3Price,
+        quantity: 30,
+        type: 'cookies',
+        image: 'chocolatechipscookie.png'
+	}); 
+
+    let product7Price = parseFloat(2.00);
+    let product7 = new Product({
+        sku: 'SKU110016',
+        name: 'Cheese Cake',
+        description: 'Slice Cheese Cake',
+        price: product3Price,
+        quantity: 4,
+        type: 'pastries',
+        image: 'cheesecake.png'
 	}); 
 
 	await Promise.all([
@@ -67,7 +122,13 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
             user2.save(),
             user3.save(),
             product1.save(),
-            product2.save()
+            product2.save(),
+            product3.save(),
+            product4.save(),
+            product5.save(),
+            product6.save(),
+            product7.save()
+
 		]);
 
 	let currentUsers = await User.find({});

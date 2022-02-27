@@ -55,21 +55,6 @@ let orderSchema = new Schema({
  function getDecimalNumber(number) {    return (number/1000000); }
  function setDecimalNumber(number) {    return (number*1000000); }
 
-// Getter
-//inventorySchema.path('price').get(function(num) {
-//    return (num / 100).toFixed(2);
-//  });
-  
-  // Setter
-//inventorySchema.path('price').set(function(num) {
-//    return num * 100;
-//  });
-
-//const User = mongoose.model('user', userSchema);
-//const Product = mongoose.model('product', productSchema);
-//const Order = mongoose.model('order', orderSchema);
-//const Cart = mongoose.model('cart', cartSchema);
-
 
 module.exports = {	
 	getModel: () => {
@@ -82,9 +67,6 @@ module.exports = {
 							productSchema);
             Order = connection.model("OrderModel", 
 							orderSchema);
-           // Cart = connection.model("CartModel", 
-			//				cartSchema);
-
 		};
 		return {User, Product, Order};
 	}

@@ -36,7 +36,7 @@ exports.postOrder =  async (req, res, next) => {
 
             if (outOfStockProd.length > 0) {
                     res.render('checkoutView', 
-                    {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it from your shopping cart:', outOfStockProd:outOfStockProd});
+                    {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it or change quantity from your shopping cart:', outOfStockProd:outOfStockProd});
             } else {
                        
                try {

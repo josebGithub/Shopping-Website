@@ -6,7 +6,7 @@
             <input type="hidden" name="sku" value="{{this.sku}}">
             <img src="/images/{{this.image}}" alt="{{this.image}}" style="width:30%">
             <h1>{{ this.name }}</h1>
-            <p>${{ this.price }}</p>
+            <p>${{convertToDecimal this.price }}</p>
             <p>{{ this.description }}</p>
             <label for="quantity">Quantity:</label>
             <select name="quantity" id="quantity">
