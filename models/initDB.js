@@ -117,6 +117,62 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
         image: 'cheesecake.png'
 	}); 
 
+
+    let product8Price = parseFloat(10.00);
+    let product8 = new Product({
+        sku: 'SKU110017',
+        name: 'Apple Pie',
+        description: 'Red Apple Pie',
+        price: product8Price,
+        quantity: 50,
+        type: 'pies',
+        image: 'applepie.png'
+	}); 
+
+    let product9Price = parseFloat(2.00);
+    let product9 = new Product({
+        sku: 'SKU110018',
+        name: 'Pumpkin Pie',
+        description: 'Seasonal Pumpkin Pie',
+        price: product9Price,
+        quantity: 10,
+        type: 'pies',
+        image: 'pumpkinpie.png'
+	}); 
+
+    let product10Price = parseFloat(2.00);
+    let product10 = new Product({
+        sku: 'SKU110019',
+        name: 'Red Velvet Cake',
+        description: 'Raspberry V Cake',
+        price: product3Price,
+        quantity: 50,
+        type: 'cakes',
+        image: 'redvelvetcake.png'
+	}); 
+
+    let product11Price = parseFloat(2.00);
+    let product11 = new Product({
+        sku: 'SKU110020',
+        name: 'Carrot Cake',
+        description: 'Buttercream Carrot Cake',
+        price: product11Price,
+        quantity: 50,
+        type: 'cakes',
+        image: 'carrotcake.png'
+	}); 
+
+    let product12Price = parseFloat(2.00);
+    let product12 = new Product({
+        sku: 'SKU110021',
+        name: 'Chiffon Cake',
+        description: 'Birthday Chiffon Cake',
+        price: product12Price,
+        quantity: 50,
+        type: 'cakes',
+        image: 'chiffoncake.png'
+	}); 
+
 	await Promise.all([
 			user1.save(),
             user2.save(),
@@ -127,7 +183,12 @@ const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
             product4.save(),
             product5.save(),
             product6.save(),
-            product7.save()
+            product7.save(),
+            product8.save(),
+            product9.save(),
+            product10.save(),
+            product11.save(),
+            product12.save()
 
 		]);
 
