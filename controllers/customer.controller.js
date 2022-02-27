@@ -80,7 +80,6 @@ exports.getCustomerList = async (req, res, next) => {
 
          const order = await Order.findOne({orderid: orderID});
 
-
         if (!order) {
             let error = 'No orders are found!';
             return res.render('errorView', {title : 'Error Page', error});
@@ -89,21 +88,21 @@ exports.getCustomerList = async (req, res, next) => {
                // let customerOrder = order.orderList.find(orderlist => orderlist.orderId == orderID);
                var cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
 
-                 console.log('editOrder: ');
-                    console.log(req.session.cart);
+            if (typeof req.session.cart === 'undefined' || typeof req.session.cart.totalQuantity === 'undefined' || cart.orderId !=orderID){    
 
-            if (typeof req.session.cart === 'undefined' || typeof req.session.cart.totalQuantity === 'undefined'){    
+                if (cart.orderId !=orderID) {
+                    cart=new ShoppingCart({});
+                }
                 for (const [key, value] of Object.entries(order.items)) {
                     cart.add(value.product, value.quantity);
-                }
+                } 
 
-                cart.updateOrderId(orderID);
+                //cart.updateOrderId(orderID);
+                cart.orderId = orderID;
                 cart.userid = userID;
                 req.session.cart = cart;
                 req.session.userid = userID;
 
-                console.log('Edit Order: ');
-                console.log(cart);
               } //if 
                 
                 res.render('shoppingcartView', {title:"Shopping Cart",
@@ -146,6 +145,6 @@ exports.deleteOrder =  async (req, res, next) => {
 exports.cancelEditOrder = async (req , res , next) => {
 
     req.session.cart = {};
-    res.redirect('/home/products');
+    res.redirect('/home/customers');
 
 }

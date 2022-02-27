@@ -81,7 +81,6 @@ exports.userAuth = async (req, res, next) => {
 exports.roles = function hasRole(roles) {
     return async function(req, res, next) {
       const user = await User.findOne({ _id: req.session.loginid }) ;
-      console.log('type : '+user.type);
       if (!user || !roles.includes(user.type)) {
         return res.status(403).send({error: { status:403, message:'Access denied.'}});
       }

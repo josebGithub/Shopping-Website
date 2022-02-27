@@ -75,12 +75,13 @@ module.exports = function ShoppingCart(existCart)  {
         delete this.items[id];
     }
 
+    /** 
     this.updateOrderId = (orderId) => {
       
         this.orderId = orderId;
     }
     
-    
+    **/
     
     
 };

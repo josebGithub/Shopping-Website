@@ -27,19 +27,19 @@
 	<div class="nav">
             <img src="/images/logo.png" class="brand-logo" alt="">
             <div class="nav-items">
-                <div class="search">
-                  <form method="GET" action="/search/products/name/type">
-                    <input type="search" name="search" id="search" class="search-box" placeholder="Search products by name or type" required>
-                    <button class="search-btn" type="submit">search</button>
-                  </form>
-                </div>
-     
+                
               {{#if admin}}
                    <a href="/login" class="link">Login</a>
                    <a href="/logout" class="link">Logout</a>
               {{/if}}
 
               {{#unless admin}}
+                  <div class="search">
+                    <form method="GET" action="/search/products/name/type">
+                      <input type="search" name="search" id="search" class="search-box" placeholder="Search products by name or type" required>
+                      <button class="search-btn" type="submit">search</button>
+                    </form>
+                  </div>
                    <div class="filterprice">
                        <form method="GET" action="/search/products/price/range">
                          <input type="number" name="minprice" id="minprice" placeholder="min price" required>
@@ -69,7 +69,7 @@
                 <ul class="links-container">
                     <li class="link-item"><a href="/home" class="link">home</a></li>
                     <li class="link-item"><a href="/home/products/pastries" class="link">pastries</a></li>
-                    <li class="link-item"><a href="#" class="link">Cookies</a></li>
+                    <li class="link-item"><a href="/home/products/cookies" class="link">Cookies</a></li>
                     <li class="link-item"><a href="#" class="link">pies</a></li>
                     <li class="link-item"><a href="#" class="link">Cakes</a></li>
                 </ul>
