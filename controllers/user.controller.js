@@ -1,6 +1,8 @@
 const SweetBakeryDB = require('../models/sweetbakeryDB.model');
 const {User, Product, Order} = SweetBakeryDB.getModel();
 
+
+//Render to the loginView to display the login form
 exports.login =  async (req, res, next) => {
 
         try {
@@ -12,6 +14,7 @@ exports.login =  async (req, res, next) => {
 
 }
 
+//Logout for the user
 exports.logout =  async (req, res, next) => {
 
         if (req.session.loggedin) {
@@ -25,6 +28,7 @@ exports.logout =  async (req, res, next) => {
         }
 }
 
+//User authorization
 exports.userAuth = async (req, res, next) => {
 
     try {
@@ -77,7 +81,7 @@ exports.userAuth = async (req, res, next) => {
 
 }
 
-
+//Only allow those users that are in the roles to access the page
 exports.roles = function hasRole(roles) {
     return async function(req, res, next) {
       const user = await User.findOne({ _id: req.session.loginid }) ;

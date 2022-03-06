@@ -3,6 +3,9 @@ const SweetBakeryDB = require('../models/sweetbakeryDB.model.js');
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 const ShoppingCart = require('../models/cart.model');
 
+
+//Get the customer list and render to the customersView to list all the customers
+//order by customer id
 exports.getCustomerList = async (req, res, next) => {
 
     try {
@@ -36,6 +39,8 @@ exports.getCustomerList = async (req, res, next) => {
  };
 
 
+ //Get the customer orders and render to customerOrderListView to display 
+ //all the orders of the customer
  exports.getCustomerOrderList = async (req, res, next) => {
 
     try {
@@ -70,7 +75,8 @@ exports.getCustomerList = async (req, res, next) => {
  
  };
 
-
+//Get the customer order data from order collection and render to shoppingcartView 
+//to display the order(all the items) for the customer
  exports.editOrder = async (req, res, next) => {
 
     try {
@@ -115,7 +121,7 @@ exports.getCustomerList = async (req, res, next) => {
 
 };
 
-
+//Delete the order from the customer order list
 exports.deleteOrder =  async (req, res, next) => {
 
     try {
@@ -141,7 +147,7 @@ exports.deleteOrder =  async (req, res, next) => {
 
 }
 
-
+//Cancel the update of the customer order
 exports.cancelEditOrder = async (req , res , next) => {
 
     req.session.cart = {};

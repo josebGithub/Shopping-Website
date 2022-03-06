@@ -4,7 +4,7 @@ const credentials = require("./credentials.js");
 
 const dbUrl = 'mongodb://' + credentials.username +
 ':' + credentials.password + '@' + credentials.host + ':' + credentials.port + '/' + credentials.database;
-console.log('dbURL => '+dbUrl);
+//console.log('dbURL => '+dbUrl);
 
 let connection = null;
 let model = null;
@@ -52,8 +52,8 @@ let orderSchema = new Schema({
 });
 
  //Getter & Setter
- function getDecimalNumber(number) {    return (number/1000000); }
- function setDecimalNumber(number) {    return (number*1000000); }
+ //function getDecimalNumber(number) {    return (number/1000000); }
+ //function setDecimalNumber(number) {    return (number*1000000); }
 
 
 module.exports = {	
@@ -67,6 +67,7 @@ module.exports = {
 							productSchema);
             Order = connection.model("OrderModel", 
 							orderSchema);
+			console.log("Connected to the database and returned model...");
 		};
 		return {User, Product, Order};
 	}

@@ -19,7 +19,7 @@ exports.postOrder =  async (req, res, next) => {
             return res.render('errorView', {title : 'Error Page', type: 'err', error});
         }
          
-
+            //check if the item is out of stock
             try {
                 var outOfStockProd=[];
              
@@ -34,11 +34,13 @@ exports.postOrder =  async (req, res, next) => {
                 return res.render('errorView', {title : 'Error Page', type: 'err', error});
             }
 
+            //if out of stock, let the customer knows which products are out of stock
             if (outOfStockProd.length > 0) {
                     res.render('checkoutView', 
                     {title:"Checkout page", msg:'Your checkout is not completed. The products don\'t have enough stocks, please remove it or change quantity from your shopping cart:', outOfStockProd:outOfStockProd});
             } else {
                        
+               //insert an order into order collection and render to checkoutView
                try {
                     let userid = req.session.userid;
                     let orderid = cart.orderId;
@@ -58,6 +60,7 @@ exports.postOrder =  async (req, res, next) => {
                   
                     const savedOrder = await order.save();
 
+                        //update the quantity of the product in Product collection
                         for (const [key, value] of Object.entries(cart.items)) {
                             let product = await Product.findOne({_id:key});
                             product.quantity -= value.quantity;
@@ -75,7 +78,7 @@ exports.postOrder =  async (req, res, next) => {
            
 }
 
-//get all orders for the user and list the orders for the user
+//get all orders for the customer and list the orders for the customer
 exports.getOrders =  async (req, res, next) => {
 
     try {
@@ -103,7 +106,8 @@ exports.getOrders =  async (req, res, next) => {
       }
 }
 
-//Get all the order items for the order for the user
+
+//Get all the items for the order for the customer
 exports.getOrderHistory =  async (req, res, next) => {
 
     try {
@@ -136,7 +140,7 @@ exports.getOrderHistory =  async (req, res, next) => {
 
 }
 
-
+//remove the item from the shopping cart
 exports.removeItem =  async (req, res, next) => {
 
     let cart = new ShoppingCart(req.session.cart);
@@ -154,7 +158,7 @@ exports.removeItem =  async (req, res, next) => {
 
 }
 
-
+//update the order
 exports.updateOrder =  async (req, res, next) => {
 
         let cart = req.session.cart;
@@ -191,7 +195,8 @@ exports.updateOrder =  async (req, res, next) => {
 
             try {
                 var outOfStockProd=[];
-             
+                
+                //check if the item is out of stock for updating
                 for (const [key, value] of Object.entries(cart.items)) {
                    let product = await Product.findOne({_id:key});
                    if (product.quantity < value.quantity ) {
@@ -203,6 +208,7 @@ exports.updateOrder =  async (req, res, next) => {
                 return res.render('errorView', {title : 'Error Page', type: 'err', error}); 
             }
 
+            //if the item/items is/are out of stocks, notify admin
             if (outOfStockProd.length > 0) {
 
                 for (const [key, value] of Object.entries(oldOrder.items)) {
@@ -217,6 +223,7 @@ exports.updateOrder =  async (req, res, next) => {
             } else { 
                     try {
 
+                        //update the order and save the update to the Order collection
                         let order = new Order ({ 
                                 totalQuantity : totalQuantity,
                                 total : total,
@@ -233,6 +240,7 @@ exports.updateOrder =  async (req, res, next) => {
                         //Add the updated order
                         const savedNewOrder = await order.save();
 
+                        //update the quantity of the Product collection
                         for (const [key, value] of Object.entries(cart.items)) {
                             let product = await Product.findOne({_id:key});
                             product.quantity -= value.quantity;
@@ -253,7 +261,7 @@ exports.updateOrder =  async (req, res, next) => {
                 } //else   
 }
     
-
+//canecl the order
 exports.cancelOrder = async (req , res , next) => {
 
     req.session.cart = {};

@@ -1,6 +1,9 @@
 const SweetBakeryDB = require('../models/sweetbakeryDB.model.js');
 const {User, Product, Order, Cart} = SweetBakeryDB.getModel();
 
+
+//Get the list of the products from Product collection and render to productsView
+//to display the list of products for admin
 exports.getProductList = async (req, res, next) => {
 
     try {
@@ -51,6 +54,9 @@ exports.getProductList = async (req, res, next) => {
  
  };
 
+
+ //Get the products from the Product Collection based on the product type
+ // and display the products by rendering to the productsdisplayView
   exports.getProductsDisplay = async (req, res, next) => {
 
    
@@ -98,6 +104,7 @@ exports.getProductList = async (req, res, next) => {
  
  };
  
+ //Render to the addProductView to display the add product form
  exports.addProduct = async (req, res, next) => {
 
         try {
@@ -110,6 +117,7 @@ exports.getProductList = async (req, res, next) => {
  };
  
  
+ //Add a new product to the Product collection
 exports.saveProduct = async (req , res , next) => {
 
     let product = new Product({
@@ -134,6 +142,8 @@ exports.saveProduct = async (req , res , next) => {
     
 };
 
+//Get the data from the Product collection, render to the editProductView 
+//to  display the edit product form
 exports.editProduct = async (req, res, next) => {
 
     try {
@@ -169,7 +179,7 @@ exports.editProduct = async (req, res, next) => {
 
 };
 
-
+//Update the product and saved the update to the Product collection
 exports.saveEditProduct = async (req , res , next) => {
 
   
@@ -204,6 +214,8 @@ exports.saveEditProduct = async (req , res , next) => {
   
 };
 
+//Get the data from the Product collection, render to the deleteProductView 
+//to  display the delete product form
 exports.deleteProduct = async (req, res, next) => {
 
   
@@ -240,6 +252,7 @@ exports.deleteProduct = async (req, res, next) => {
 };
 
 
+//Delete the product from the Product collection and then redirect the admin back to the product list
 exports.saveDeleteProduct = async (req , res , next) => {
 
 

@@ -16,10 +16,11 @@ Admin has to login to access the admin menu. After login it will redirect to the
 ## Requirement
 - npm install 
 - has to set up mongodb, create the data/db for mongodb, create admin account and user account for mongdb.
-- Run initDB.js to initialize the database schema.
+- node models/initDB.js to initialize the database.
+- node app.js to run the application.
 
 
-## Other information
+## Important information
 - The website has been tested with Chrome and Firefox.
 - Note : If Admin edit the order without changing the quantity of the item/items or remove item/items, the admin has to click the 'Cancel' button to go back to the customer list. DON'T hit the 'Update' button without changing the quantity or remove item.
 

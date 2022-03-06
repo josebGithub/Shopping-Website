@@ -3,6 +3,8 @@ const {User, Product, Order} = SweetBakeryDB.getModel();
 const ShoppingCart = require('../models/cart.model');
 const { redirect } = require('express/lib/response');
 
+
+//Add the item to the cart
 exports.addProductToCart =  async (req, res, next) => {
 
     let cart = new ShoppingCart(req.session.cart ? req.session.cart : {});
@@ -30,6 +32,7 @@ exports.addProductToCart =  async (req, res, next) => {
        
 };
 
+//update the item quantity in the shopping cart
 exports.updateProductToCart = async (req, res, next) => {
 
     

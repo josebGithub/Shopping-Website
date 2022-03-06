@@ -4,6 +4,9 @@ const ShoppingCart = require('../models/cart.model');
 const { redirect } = require('express/lib/response');
 const res = require('express/lib/response');
 
+
+//To display the order(list all the items) by rendering to the shoppingcartView which will
+//display the order in the Shopping Cart of the customer or the Update order of the admin
 module.exports =  async (req, res, next) => {
     try {
 

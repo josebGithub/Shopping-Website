@@ -1,7 +1,7 @@
 const req = require("express/lib/request");
 
 
-
+//cart object contains the order information, contains functions to add, update and remove item
 module.exports = function ShoppingCart(existCart)  {
 
     const formatData = (input) => {
@@ -74,21 +74,5 @@ module.exports = function ShoppingCart(existCart)  {
         this.total -= this.items[id].quantity * this.items[id].product.price;
         delete this.items[id];
     }
-
-    /** 
-    this.updateOrderId = (orderId) => {
-      
-        this.orderId = orderId;
-    }
-    
-    **/
-    
     
 };
-
-/** 
-exports.clearCart = (existCart, sessionCart) => {
-    this.existCart = {};
-    sessionCart={};
-}
-**/
