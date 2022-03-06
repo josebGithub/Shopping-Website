@@ -1,4 +1,4 @@
-# METCS601_Project
+# METCS602_Project
 ![BU MET!](https://scontent-hkt1-2.xx.fbcdn.net/v/t1.6435-9/70685441_2848187218541888_5583214686003789824_n.jpg?_nc_cat=108&ccb=1-3&_nc_sid=973b4a&_nc_ohc=BwDf3gHf8ukAX8qFZzF&_nc_oc=AQm021PAFiF9x3VmH1OPpS8Eid79jYIE7jtuRt4fLwljACl9Sc3m9hsKvK7jSRw_NJk&_nc_ht=scontent-hkt1-2.xx&oh=860551b869193d0d896ae464ee060cf5&oe=60DA9D26)
 
 Institution: [Boston University's Metropolitan College](https://www.bu.edu/met/)<br>
