@@ -1,0 +1,28 @@
+     <div>
+        <header>
+           <h1>Order List</h1>
+        </header>
+        <hr/>
+     </div>
+        <div>
+            <div>
+               <table align="center">
+                    <thead>
+                    <tr>
+                         <th>Order Date</th>
+                          <th>Order ID</th>
+                    </tr>
+                    </thead>
+                   <tbody>
+                    {{#each data}}
+                    <tr>
+                       <td>{{this.orderdate}}</td>
+                       <td> <a href="/home/orders/{{this.orderid}}">{{this.orderid}}</a></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+           

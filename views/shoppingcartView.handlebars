@@ -1,39 +1,66 @@
+<div>
+ <form method="POST" action="{{action}}">
     <div class="CartContainer">
         <div class="Header">
+          {{#isEqual action "checkout"}}  
             <h3 class="Heading">Shopping Cart</h3>
-            <h5 class="Action">Remove all</h5>
+          {{else}}
+             <h4>Order Id : {{data.orderId}} <h4> 
+             <h4> User Id : {{data.userid}}</h4>
+          {{/isEqual}}
+
+        <!--    <h5 class="Action">Remove all</h5>  -->
         </div>
         {{#each data.items}}
             <div class="Cart-Items">
                 <div class="image-box">
-                    <img src="/images/{{this.image}}" style="height:40px" />
+                    <img src="/images/{{this.product.image}}" style="height:40px" />
                 </div>
                 <div class="about">
-                    <h2 class="title">{{this.name}}</h2>
-                    <h3 class="subtitle">{{this.description}}</h3>
+                    <h2 class="title">{{this.product.name}}</h2>
+                    <h3 class="subtitle">{{this.product.description}}</h3>
                 </div>
                 <div class="counter">
-                    <div class="btn">+</div>
-                    <div class="count">{{this.quantity}}</div>
-                    <div class="btn">-</div>
+                    <label for="quantity">Quantity:</label>
+                     <select name="quantity" id="quantity"  onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
+                        <option value="/home/cart/update/{{this.product._id}}/1/{{@root.action}}" {{{isSelected this.quantity 1}}}>1</option>
+                        <option value="/home/cart/update/{{this.product._id}}/2/{{@root.action}}" {{{isSelected this.quantity 2}}}>2</option>
+                        <option value="/home/cart/update/{{this.product._id}}/3/{{@root.action}}" {{{isSelected this.quantity 3}}}>3</option>
+                        <option value="/home/cart/update/{{this.product._id}}/4/{{@root.action}}" {{{isSelected this.quantity 4}}}>4</option>
+                        <option value="/home/cart/update/{{this.product._id}}/5/{{@root.action}}" {{{isSelected this.quantity 5}}}>5</option>
+                    </select>  
+                </div>
+                <div class="about">
+                    <div class="title">Price : ${{convertToDecimal this.product.price}}</div>
                 </div>
                 <div class="prices">
-                    <div class="amount">{{this.price}}</div>
-                    <div class="remove"><u>Remove</u></div>
+                    <div class="amount">${{convertToDecimal this.total}}</div>
+                    <div class="remove"><a href="/home/remove/{{this.product._id}}/{{@root.action}}"><u>Remove</u></a></div>
                 </div>
             </div>
         {{/each}}
       <hr> 
       <div class="checkout">
       <div class="total">
+          <div class="total">
           <div>
               <div class="Subtotal">Total</div>
           </div>
           <div>
-               <div class="total-amount">${{data.total}}</div>
+               <div class="total-amount">${{convertToDecimal data.total}}</div>
           </div>
-         
       </div>
-      <button class="button">Checkout</button>
+      </div>
+           <button class="button" type="submit" value="{{action}}">{{action}}</button>
+          {{#isEqual action "checkout"}}  
+            <input class="button" type="button" value="Remove All"
+                  class="cancel" onclick="cancelCheckout()">
+          {{else}}
+            <input class="button" type="button" value="Cancel"
+                  class="cancel" onclick="cancelOrderUpdate()">
+          {{/isEqual}}
+          
     </div>
+   </div>
+  </form>
  </div>

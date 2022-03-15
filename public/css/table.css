@@ -1,0 +1,38 @@
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    color: blue;
+    width: 80%;
+    margin: 100px auto;
+  }
+  
+ table td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  table thead {
+      font-family:Arial, Helvetica, sans-serif;
+      font-size: medium;
+      color:blue;
+      text-align: center;
+  }
+
+  caption {
+	font-weight: bold;
+	font-size: 24px;
+	text-align: center;
+	color: black;
+	margin-bottom: 16px;
+  }
+
+  h3 {
+	font-weight: bold;
+	font-size: 18px;
+	text-align: left;
+	color: blue;
+	margin-bottom: 16px;
+  }
+
+  

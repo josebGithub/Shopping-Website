@@ -1,40 +1,72 @@
 var express = require('express');
 var router = express.Router();
 
-// other modules
-var displayHomePage 	= require("./home.controller");
-var displayPastriesPage   = require("./pastries.controller");
-var addProductToCart = require("./cart.controller");
+
+// controllers
+var homeController	= require("./home.controller");
+var productController  = require("./product.controller");
+//var addProductToCart = require("./cart.controller");
 var showShoppingCart = require("./shoppingcart.controller");
+var orderController = require("./order.controller");
+var userController = require("./user.controller");
+var hasRoles = userController.roles;
+var productController = require("./product.controller");
+var customerController = require("./customer.controller");
+var cartController = require("./cart.controller");
+var searchController = require("./search.controller");
+//const req = require('express/lib/request');
 
-/** 
-var addEmployee 		= require("./addEmployee");
-var saveEmployee 		= require("./saveEmployee");
-var editEmployee 		= require("./editEmployee");
-var saveAfterEdit 	    = require("./saveAfterEdit");
-var deleteEmployee 		= require("./deleteEmployee");
-var deleteEmployeeAfterConfirm 	= require("./deleteEmployeeAfterConfirm");
-*/
 
-// router specs
+
+// routers for home and user login
 router.get('/', function(req, res, next) {
   res.redirect('/home');
 });
+router.get('/home', 						homeController.displayHomePage);
+router.get('/login',                  userController.login);
+router.post('/userauth',             userController.userAuth);
+router.get('/logout',               userController.logout);
 
-router.get('/home', 						displayHomePage);
-router.get('/home/pastries', 			    displayPastriesPage);
-router.post('/home/pastries/add',           addProductToCart);
-router.get('/home/shopping-cart',           showShoppingCart);
-router.get('/home/pastries/add/:id',          addProductToCart);
+//routers for products
+router.get('/home/products/:type', 			    productController.getProductsDisplay);
+router.get('/home/products',  hasRoles(['admin']),   productController.getProductList);
+router.get('/home/product/add',        hasRoles(['admin']),  productController.addProduct);
+router.post('/home/product/add',         hasRoles(['admin']),  productController.saveProduct);
+router.get('/home/product/edit/:id',        hasRoles(['admin']),     productController.editProduct);
+router.post('/home/product/edit/:id',        hasRoles(['admin']),   productController.saveEditProduct);
+router.get('/home/product/delete/:id',         hasRoles(['admin']),    productController.deleteProduct);
+router.post('/home/product/delete/:id',        hasRoles(['admin']),   productController.saveDeleteProduct);
 
-/** 
-router.get('/employees/add', 				addEmployee);
-router.post('/employees/add', 			saveEmployee);
 
-router.get('/employees/edit/:id', 	editEmployee);
-router.post('/employees/edit/', 	saveAfterEdit);
+//routers for shopping cart and order
+router.post('/home/cart/add',           cartController.addProductToCart);
+router.get('/home/cart/add/:id',          cartController.addProductToCart);
+router.get('/home/shopping-cart/:action',           showShoppingCart);
+router.post('/home/shopping-cart/checkout',                 orderController.postOrder);
+router.post('/home/shopping-cart/update',               orderController.updateOrder);
+router.get('/home/orders',            orderController.getOrders);
+router.get('/home/orders/:orderid',     orderController.getOrderHistory);
+router.get('/home/remove/:productId/:action',       orderController.removeItem);
+router.get('/home/cart/update/:productId/:quantity/:action',   cartController.updateProductToCart);
+router.get('/home/order/cancel',                        orderController.cancelOrder);
 
-router.get('/employees/delete/:id', deleteEmployee);
-router.post('/employees/delete', deleteEmployeeAfterConfirm);
-*/
+
+//routers for customer
+router.get('/home/customers',         hasRoles(['admin']), customerController.getCustomerList);
+router.get('/home/customer/:id',      hasRoles(['admin']),  customerController.getCustomerOrderList);       
+router.get('/home/customer/order/edit/:userid/:orderid',    hasRoles(['admin']),      customerController.editOrder);
+router.get('/home/customer/order/delete/:userid/:orderid',      hasRoles(['admin']),    customerController.deleteOrder);
+router.get('/home/customer/order/cancel',   customerController.cancelEditOrder);
+
+//routers for user to search products on the website
+router.get('/search/products/name/type',             searchController.searchProductsByNameOrType );
+router.get('/search/products/price/range',             searchController.getProductsByPriceRange);
+
+
+//routers for REST APIs
+router.get('/search/products',             searchController.getAllProducts);
+router.get('/search/products/name/:name',            searchController.getProductByName);
+router.get('/search/products/minprice/:minprice/maxprice/:maxprice',             searchController.getProductsByPriceRange);
+
+
 module.exports = router;

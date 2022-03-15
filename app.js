@@ -10,8 +10,15 @@ var app = express();
 app.engine('handlebars', 
     handlebars({defaultLayout: 'navigationbar',
             helpers: {
-              shoppingCartPage : false
-            }}));
+              admin:false, 
+              shoppingCartPage : false, 
+              convertToDecimal : function(val) {return val.toFixed(2);},
+              isSelected: function (val1, val2) {
+                return val1 === val2 ? 'selected' : '';},
+              isEqual: function(val1, val2, options) {
+                  return (val1 === val2)? options.fn(this) : options.inverse(this);}
+            }
+          }));
 app.set('view engine', 'handlebars');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,6 +32,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }))
+
 
 // res.locals is an object passed to hbs engine
 app.use(function(req, res, next) {
@@ -40,6 +48,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Routing
 var routes = require('./controllers/index');
+const req = require('express/lib/request');
 app.use('/', routes);
 
 app.use(function(req, res) {

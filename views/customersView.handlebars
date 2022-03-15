@@ -1,0 +1,22 @@
+<div>
+    <table>
+        <tr>
+            <th>Customer Id</th>
+            <th>Customer Username</th>
+            <th>Customer Firstname</th>
+            <th>Customer Lastname</th>
+            <th>Customer Email</th>
+            <th>Customer Address</th>
+        </tr>
+        {{#each data}}
+        <tr>
+            <td><a href="/home/customer/{{this.id}}">{{this.id}}</a></td> 
+            <td>{{this.username}}</td>
+            <td>{{this.firstname}}</td>
+            <td>{{this.lastname}}</td>
+            <td>{{this.email}}</td>
+            <td>{{this.address}}</td>
+        </tr>
+        {{/each}}
+    </table>
+</div>

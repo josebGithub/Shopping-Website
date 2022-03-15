@@ -1,28 +1,78 @@
+const req = require("express/lib/request");
 
 
-
+//cart object contains the order information, contains functions to add, update and remove item
 module.exports = function ShoppingCart(existCart)  {
 
- 
-   this.totalQuantity = existCart.totalQuantity || 0;
-   this.total = existCart.total || 0;
-   this.items = existCart.items || {};
+    const formatData = (input) => {
+        if (input > 9) {
+          return input;
+        } else return `0${input}`;
+      };
 
-    this.add = (item , id, quantity) => {
-        console.log("Calling add...");
-        console.log("this.items : "+this.items);
+    const date = function() {
+        let date = new Date();
+        let dd = formatData(date.getDate());
+        let mm = formatData(date.getMonth() + 1);
+        let yyyy = date.getFullYear();
+        let HH = formatData(date.getHours());
+       // let hh = formatData(formatHour(date.getHours()));
+        let MM = formatData(date.getMinutes());
+        let SS = formatData(date.getSeconds());
+         return mm+'-'+dd+'-'+yyyy+' '+HH+':'+MM+':'+SS;
+     }
+
+    let today = new Date();
+    let time = today.getTime();
+    //let todayWithFormat = mm + dd + yyyy;
+
+    let orderId = "WPN-"+time;
+
+    this.totalQuantity = existCart.totalQuantity || 0;
+    this.total = existCart.total || 0;
+    this.items = existCart.items || {};
+    this.date = existCart.date || date();
+    this.orderId = existCart.orderId || orderId;
+    this.userid = existCart.userid || 0;
+
+
+    this.add = (product , quantity) => {
+       
+        let id = product._id;
+        let price = parseFloat(product.price.toString()); 
        
         if (!this.items[id]) {
-            this.items[id] = item;
-            this.items[id].quantity=quantity;
-           // this.items[id].total=this.item[id].quantity*this.item[id].price;
-            this.totalQuantity +=quantity;
-            this.total += quantity * this.items[id].price;
-        } else {
+            this.items[id] = { product: {},
+            quantity: 0,
+            total: 0,
+            };
+            this.items[id].product = product;
+        } 
+
             this.items[id].quantity+=quantity;
-          //  this.items[id].total=this.item[id].quantity*this.item[id].price;
+            this.items[id].total += quantity * price;
             this.totalQuantity +=quantity;
-            this.total += quantity * this.items[id].price;
-        }
+            this.total += quantity * price;
     }
+
+    this.update = (product , quantity) => {
+       
+        let id = product._id;
+        let price = parseFloat(product.price.toString());
+       
+        let difference = quantity - this.items[id].quantity;
+        
+            this.items[id].quantity+=difference;
+            this.items[id].total += difference * price;
+            this.totalQuantity +=difference;
+            this.total += difference * price;
+    }
+    
+
+    this.remove = function(id) {
+        this.totalQuantity -= this.items[id].quantity;
+        this.total -= this.items[id].quantity * this.items[id].product.price;
+        delete this.items[id];
+    }
+    
 };

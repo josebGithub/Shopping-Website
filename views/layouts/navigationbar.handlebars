@@ -5,13 +5,20 @@
     {{#unless shoppingCartPage}}
 	    <link rel='stylesheet' type="text/css" href='/stylesheets/bootstrap.css'>
         <link rel="stylesheet" type="text/css" href="/css/home.css">
-        <link rel="stylesheet" type="text/css" href="/css/cart.css">
+        <link rel="stylesheet" type="text/css" href="/css/card.css">
+        <link rel="stylesheet" type="text/css" href="/css/order.css">
+         <link rel="stylesheet" type="text/css" href="/css/table.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"> 
+        <link rel="stylesheet" type="text/css" href="/css/login.css">
+        <script src="/js/cancelActions.js" type="text/javascript"></script>
     {{/unless}}
+
     {{#if shoppingCartPage}}
          <link rel='stylesheet' type="text/css" href='/stylesheets/bootstrap.css'>
          <link rel="stylesheet" type="text/css" href="/css/home.css">
         <link rel="stylesheet" type="text/css" href="/css/shoppingcart.css">  
 	    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,900" rel="stylesheet"> 
+        <script src="/js/cancelActions.js" type="text/javascript"></script>
     {{/if}}
 <!--    <script src="js/shoppingcart.js"></script>   -->
 <!--	<script src="/javascripts/clickActions.js" type="text/javascript"></script> -->
@@ -20,22 +27,53 @@
 	<div class="nav">
             <img src="/images/logo.png" class="brand-logo" alt="">
             <div class="nav-items">
-                <div class="search">
-                    <input type="text" class="search-box" placeholder="search brand, product">
-                    <button class="search-btn">search</button>
-                </div>
-     
-                <a href="#"><img src="/images/user.png" alt="user profile image"></a>
-                <a href="/home/shopping-cart"><img src="/images/cart.png" alt="shopping cart image"></a>
+                
+              {{#if admin}}
+                   <a href="/login" class="link">Login</a>
+                   <a href="/logout" class="link">Logout</a>
+              {{/if}}
+
+              {{#unless admin}}
+                  <div class="search">
+                    <form method="GET" action="/search/products/name/type">
+                      <input type="search" name="search" id="search" class="search-box" placeholder="Search products by name or type" required>
+                      <button class="search-btn" type="submit">search</button>
+                    </form>
+                  </div>
+                   <div class="filterprice">
+                       <form method="GET" action="/search/products/price/range">
+                         <input type="number" name="minprice" id="minprice" placeholder="min price" required>
+                         <input type="number" name="maxprice" id="maxprice" placeholder="max price" required>
+                         <button class="filterprice-btn" type="submit">search</button>
+                       </form>
+                   </div>
+                  
+                  <div><a href="/login" class="link">Login</a></div>
+                  <div><a href="/logout" class="link">Logout</a></div>
+                  <a href="/home/shopping-cart/checkout"><img src="/images/cart.png" alt="shopping cart image" title="Shopping cart"></a>
+
+                   <a href="/home/orders"><img src="/images/order-history.png" alt="order history image" title="Order history"></a>
+              {{/unless}}
             </div>
+        </div>
     </div>
+              {{#if admin}}
+                <ul class="links-container">
+                    <li class="link-item"><a href="/home/product/add" class="link">Add Product</a></li>
+                    <li class="link-item"><a href="/home/products" class="link">Product List</a></li>
+                    <li class="link-item"><a href="/home/customers" class="link">Customer List</a></li>
+                </ul>
+              {{/if}}
+
+              {{#unless admin}}
                 <ul class="links-container">
                     <li class="link-item"><a href="/home" class="link">home</a></li>
-                    <li class="link-item"><a href="/home/pastries" class="link">pastries</a></li>
-                    <li class="link-item"><a href="#" class="link">cakes</a></li>
-                    <li class="link-item"><a href="#" class="link">pies</a></li>
-                    <li class="link-item"><a href="#" class="link">cookies</a></li>
+                    <li class="link-item"><a href="/home/products/pastries" class="link">pastries</a></li>
+                    <li class="link-item"><a href="/home/products/cookies" class="link">Cookies</a></li>
+                    <li class="link-item"><a href="/home/products/pies" class="link">pies</a></li>
+                    <li class="link-item"><a href="/home/products/cakes" class="link">Cakes</a></li>
                 </ul>
+               {{/unless}}
   
 	<div class="panel-body">
 		{{{body}}}
